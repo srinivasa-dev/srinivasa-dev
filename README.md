@@ -49,12 +49,6 @@
     </a>
 </p>
 
-  <br/>
-  <p align="center">
-    <a href="https://github.com/srinivasa-dev/github-readme-stats"><img alt="Srinivasa's Github Stats" src="https://github-readme-stats.vercel.app/api?username=srinivasa-dev&show_icons=true&count_private=true&theme=react&hide_border=true&bg_color=0D1117" /></a>
-  <a href="https://github.com/srinivasa-dev/github-readme-stats"><img alt="Imaan Tahie's Top Languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=srinivasa-dev&langs_count=8&count_private=true&layout=compact&theme=react&hide_border=true&bg_color=0D1117"/></a>
-  </p>
-
 <br/>
 
 ## 🔗 Extras
