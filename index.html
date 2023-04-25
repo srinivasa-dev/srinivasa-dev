@@ -2,9 +2,11 @@
     <head>
         <meta name="viewport" content="width = device-width initial-scale = 1">
         <meta name="robots" content="index, follow">
+        <meta name="googlebot" content="index, follow">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="language" content="English">
         <meta name="revisit-after" content="30 days">
+        <meta property="og:type" content="website">
         <meta name="author" content="B Srinivasa Yadav">
         <meta name="title" content="Srinivasa">
         <meta name="description" content="Portfolio Website - I'M A FLUTTER/WEB/ANDROID DEVELOPER. A DEVELOPER HELPING CLIENTS GET DREAMS COME TO LIFE.">
@@ -481,5 +483,17 @@
         <script src="assets/js/bootstrap.bundle.js"></script>
 
         <script type="module" src="assets/js/firebase.js"></script>
+        
+        <!-- Clarity tracking code for https://srinivasa.dev/ -->
+        <script type="module">    
+          import {CLARITY_KEY} from "./assets/js/apikeys.js";
+
+          (function(c,l,a,r,i,t,y){        
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};        
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";        
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);    
+          })
+          (window, document, "clarity", "script", `${CLARITY_KEY}`);
+        </script>
     </body>
 </html>
