@@ -49,6 +49,8 @@ $(document).ready(function(){
         new_col2.classList.add("col-3");
         var new_col2 = document.getElementsByClassName("new-col")[3];
         new_col2.classList.add("col-3");
+        var new_col2 = document.getElementsByClassName("new-col")[4];
+        new_col2.classList.add("col-3");
 
     }
 });

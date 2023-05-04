@@ -222,6 +222,9 @@ a:hover{
     margin: 0;
     width: 1em;
 }
+#sec2 .box1 .subbox1 p{
+    font-size: 1.1rem;
+}
 #sec2 .box1 .subbox1 p:first-child{
     font-weight: 700;
 }
@@ -231,8 +234,8 @@ a:hover{
 }
 #sec2 .box1 .subbox1 .regards{
     float: right; 
-    font-size: 0.9rem; 
-    padding-top: 5em;
+    font-size: 1.0rem; 
+    padding-top: 3em;
 }
 #sec2 .box1 .subbox1 .exp{
     margin-top: 8em;
