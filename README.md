@@ -54,6 +54,7 @@
 ## 🔗 Extras
 <p align="left">
 
+<a href = "https://srinivasa.dev/">![image](https://img.shields.io/badge/portfolio-f02e2e?style=for-the-badge&logo=html5&logoColor=white)</a>
 <a href = "https://www.linkedin.com/in/srinivasa-yadav/">![image](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)</a>
 <a href = "https://twitter.com/jiltedSnowMan">![image](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)</a>
 <a href = "https://the-cybernaut.medium.com/">![image](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)</a>
@@ -63,8 +64,9 @@
 
 <br/>
 
-## 😺 Views and Followers
+## 😺 Views and more
 <a href="https://github.com/srinivasa-dev/github-profile-views-counter">
     <img src="https://komarev.com/ghpvc/?username=srinivasa-dev">
 </a>
+<a href="https://github.com/srinivasa-dev/srinivasa-dev/commits/main"><img src="https://img.shields.io/github/last-commit/srinivasa-dev/srinivasa-dev" alt="GitHub Badge"></a>
 <a href="https://github.com/srinivasa-dev?tab=followers"><img src="https://img.shields.io/github/followers/srinivasa-dev?label=Followers&style=social" alt="GitHub Badge"></a>
