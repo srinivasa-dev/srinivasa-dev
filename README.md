@@ -68,5 +68,5 @@
 <a href="https://github.com/srinivasa-dev/github-profile-views-counter">
     <img src="https://komarev.com/ghpvc/?username=srinivasa-dev">
 </a>
-<a href="https://github.com/srinivasa-dev/srinivasa-dev/commits/main"><img src="https://img.shields.io/github/last-commit/srinivasa-dev/srinivasa-dev" alt="GitHub Badge"></a>
+<a href="https://github.com/srinivasa-dev/srinivasa-dev/commits/main"><img src="https://img.shields.io/github/last-commit/srinivasa-dev/srinivasa-dev?label=last-modified" alt="GitHub Badge"></a>
 <a href="https://github.com/srinivasa-dev?tab=followers"><img src="https://img.shields.io/github/followers/srinivasa-dev?label=Followers&style=social" alt="GitHub Badge"></a>
