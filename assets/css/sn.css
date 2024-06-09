@@ -300,10 +300,13 @@ a:hover{
     border-radius: 20px;
 }
 #sec3 .box1 .subbox1 #flut{
-    width: 85%;
+    width: 94%;
 }
-#sec3 .box1 .subbox1 #an{
-    width: 55%;
+#sec3 .box1 .subbox1 #tyscr{
+    width: 45%;
+}
+#sec3 .box1 .subbox1 #andr{
+    width: 40%;
 }
 #sec3 .box1 .subbox1 #html{
     width: 80%;
@@ -318,7 +321,7 @@ a:hover{
     width: 45%;
 }
 #sec3 .box1 .subbox1 #php{
-    width: 40%;
+    width: 65%;
 }
 #sec3 .box1 .subbox1 #mysql{
     width: 60%;
@@ -327,7 +330,7 @@ a:hover{
     width: 55%;
 }
 #sec3 .box1 .subbox1 #jq{
-    width: 35%;
+    width: 40%;
 }
 
 
