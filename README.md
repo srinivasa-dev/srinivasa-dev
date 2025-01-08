@@ -3,7 +3,7 @@
 
 
 <h1>I'm Srinivasa,</h1>
-<p style="font-size:20px;font-weight:400;">I am an Engineer graduate with the background of Computer Programming. A tech enthusiast. A developer by profession. A cyclist by hobby.</p>
+<p style="font-size:20px;font-weight:400;">I am an engineering graduate with a background in Computer Programming. A tech enthusiast. A developer by profession. A cyclist by hobby.</p>
 
 <br/>
 
@@ -16,7 +16,7 @@
 
 - 👯 I’m looking to collaborate on **OpenSource Projects**
 
-- 📫 How to reach me **srinivasa.yadav.b@gmail.com**
+- 📫 How to reach me **hello@srinivasa.dev**
 
 - ⚡ Fun fact **There are around 700 separate programming languages 😵‍💫**
 
@@ -33,12 +33,14 @@
     <a href="https://www.w3schools.com/css/" target="_blank"> <img src="https://img.icons8.com/color/48/css3.png"/> </a> 
     <a href="https://getbootstrap.com" target="_blank"> <img src="https://img.icons8.com/color/48/bootstrap.png"/> </a>
     <a style="padding-right:8px;" href="https://www.mysql.com/" target="_blank"> <img src="https://img.icons8.com/fluent/50/mysql-logo.png"/> </a>
+    <a href="https://www.typescriptlang.org/" target="_blank"> <img src="https://img.icons8.com/color/48/typescript.png"/> </a>
     <a href="https://postman.com" target="_blank"> <img src="https://www.vectorlogo.zone/logos/getpostman/getpostman-icon.svg" alt="postman" width="45" height="45"/> </a>
     <a href="https://git-scm.com/" target="_blank"> <img src="https://img.icons8.com/color/48/git.png"/> </a>
 </p>
 
 <br/>
 
+<!---
 ## 📊 My Github Stats
 
 <br>
@@ -50,6 +52,7 @@
 </p>
 
 <br/>
+-->
 
 ## 🔗 Extras
 <p align="left">
