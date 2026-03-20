@@ -1,75 +1,113 @@
-<a href="https://media.giphy.com/media/K3kUpFhGsRhw93MQdq/giphy.gif"><img width="auto" height="175px" align="left" src="https://media.giphy.com/media/K3kUpFhGsRhw93MQdq/giphy.gif"/></a>
+<h1 align="left">Srinivasa Yadav</h1>
 
-
-
-<h1>I'm Srinivasa,</h1>
-<p style="font-size:20px;font-weight:400;">I am an engineering graduate with a background in Computer Programming. A tech enthusiast. A developer by profession. A cyclist by hobby.</p>
-
-<br/>
-
-
-## 🙋🏽‍♂️️ About Me
-
-<img src="https://media.giphy.com/media/4ieP6nbzjm4qnGwsIA/giphy.gif" alt="work-life gif" style="width:160px;height:160px;" align="right">
-
-- 🌱 I’m currently working on **Flutter and Dart.**
-
-- 👯 I’m looking to collaborate on **OpenSource Projects**
-
-- 📫 How to reach me **hello@srinivasa.dev**
-
-- ⚡ Fun fact **There are around 700 separate programming languages 😵‍💫**
-
-<br>
-
-## 🚀 Languages and Tools
-
-<p align="left"> 
-    <a href="https://flutter.dev/" target="_blank"> <img src="https://img.icons8.com/fluency/48/flutter.png" alt="flutter" width="48" height="48"/> </a> 
-    <a href="https://dart.dev/" target="_blank"> <img src="https://img.icons8.com/color/48/dart.png"/> </a>
-    <a href="https://firebase.google.com/" target="_blank"> <img src="https://img.icons8.com/color/48/000000/firebase.png"/> </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"> <img src="https://img.icons8.com/color/48/javascript.png"/> </a>
-    <a href="https://www.w3.org/html/" target="_blank"> <img src="https://img.icons8.com/color/48/html-5.png"/> </a> 
-    <a href="https://www.w3schools.com/css/" target="_blank"> <img src="https://img.icons8.com/color/48/css3.png"/> </a> 
-    <a href="https://getbootstrap.com" target="_blank"> <img src="https://img.icons8.com/color/48/bootstrap.png"/> </a>
-    <a style="padding-right:8px;" href="https://www.mysql.com/" target="_blank"> <img src="https://img.icons8.com/fluent/50/mysql-logo.png"/> </a>
-    <a href="https://www.typescriptlang.org/" target="_blank"> <img src="https://img.icons8.com/color/48/typescript.png"/> </a>
-    <a href="https://postman.com" target="_blank"> <img src="https://www.vectorlogo.zone/logos/getpostman/getpostman-icon.svg" alt="postman" width="45" height="45"/> </a>
-    <a href="https://git-scm.com/" target="_blank"> <img src="https://img.icons8.com/color/48/git.png"/> </a>
-</p>
-
-<br/>
-
-<!---
-## 📊 My Github Stats
-
-<br>
-
-<p align="center">
-    <a href="https://github.com/srinivasa-dev/github-readme-streak-stats">
-        <img title="🔥 Get streak stats for your profile at git.io/streak-stats" alt="Srinivasa's streak" src="https://github-readme-streak-stats.herokuapp.com/?user=srinivasa-dev&theme=black-ice&hide_border=true&stroke=0000&background=060A0CD0"/>
-    </a>
-</p>
-
-<br/>
--->
-
-## 🔗 Extras
 <p align="left">
-
-<a href = "https://srinivasa.dev/">![image](https://img.shields.io/badge/portfolio-f02e2e?style=for-the-badge&logo=html5&logoColor=white)</a>
-<a href = "https://www.linkedin.com/in/srinivasa-yadav/">![image](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)</a>
-<a href = "https://twitter.com/jiltedSnowMan">![image](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)</a>
-<a href = "https://the-cybernaut.medium.com/">![image](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)</a>
-<a href = "https://www.strava.com/athletes/the_cybernaut">![image](https://img.shields.io/badge/Strava-FC4C02?style=for-the-badge&logo=strava&logoColor=white)</a>
-
+  Flutter developer building fast, scalable, and thoughtful mobile and web products.
 </p>
 
-<br/>
+<p align="left">
+  <img src="https://img.shields.io/badge/Flutter_Developer-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter Developer">
+  <img src="https://img.shields.io/badge/Open_to_Collaborate-111111?style=flat-square&logo=github&logoColor=white" alt="Open to Collaborate">
+  <img src="https://img.shields.io/badge/Building_with_AI-0f172a?style=flat-square&logo=openai&logoColor=white" alt="Building with AI">
+  <img src="https://img.shields.io/badge/Based_in_India-ff6b35?style=flat-square&logo=googlemaps&logoColor=white" alt="Based in India">
+</p>
 
-## 😺 Views and more
-<a href="https://github.com/srinivasa-dev/github-profile-views-counter">
-    <img src="https://komarev.com/ghpvc/?username=srinivasa-dev">
-</a>
-<a href="https://github.com/srinivasa-dev/srinivasa-dev/commits/main"><img src="https://img.shields.io/github/last-commit/srinivasa-dev/srinivasa-dev?label=last-modified" alt="GitHub Badge"></a>
-<a href="https://github.com/srinivasa-dev?tab=followers"><img src="https://img.shields.io/github/followers/srinivasa-dev?label=Followers&style=social" alt="GitHub Badge"></a>
+<p align="left">
+  <a href="https://srinivasa.dev/">
+    <img src="https://img.shields.io/badge/Portfolio-srinivasa.dev-111111?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio">
+  </a>
+  <a href="https://www.linkedin.com/in/srinivasa-yadav/">
+    <img src="https://img.shields.io/badge/LinkedIn-Srinivasa%20Yadav-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
+  </a>
+  <a href="https://github.com/srinivasa-dev">
+    <img src="https://img.shields.io/badge/GitHub-srinivasa--dev-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+  </a>
+</p>
+
+---
+
+## `whoami`
+
+```bash
+name: Srinivasa Yadav
+role: Flutter Developer
+experience: 5+ years
+focus: Mobile apps, frontend systems, clean UX, developer workflows
+currently: Building production-grade Flutter apps and smarter engineering workflows
+elsewhere: Cycling, photography, open source curiosity
+```
+
+I work at the intersection of product engineering, frontend architecture, backend integrations, and release discipline. Most of my recent work is around Flutter, Dart, Firebase, REST APIs, TypeScript, and shipping interfaces that feel polished in real-world use, not just in demos.
+
+> I like products that feel simple on the surface and solid underneath.
+
+## `currently_building`
+
+- Cross-platform Flutter applications with maintainable architecture
+- Better release and debugging workflows for product teams
+- Serverless integrations and backend-connected mobile experiences
+- Cleaner UI systems with performance in mind
+- AI-assisted engineering workflows that actually save time
+
+<p align="left">
+  <img height="165" src="https://github-readme-stats.vercel.app/api?username=srinivasa-dev&show_icons=true&hide_border=true&title_color=111111&text_color=333333&icon_color=111111&bg_color=ffffff" alt="GitHub stats">
+  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=srinivasa-dev&layout=compact&hide_border=true&title_color=111111&text_color=333333&bg_color=ffffff" alt="Top languages">
+</p>
+
+## `toolbox`
+
+<p align="left">
+  <img src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter">
+  <img src="https://img.shields.io/badge/Dart-0175C2?style=flat-square&logo=dart&logoColor=white" alt="Dart">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=111111" alt="JavaScript">
+  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=111111" alt="Firebase">
+  <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js">
+  <img src="https://img.shields.io/badge/Cloudflare-F38020?style=flat-square&logo=cloudflare&logoColor=white" alt="Cloudflare">
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white" alt="MySQL">
+  <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white" alt="Git">
+  <img src="https://img.shields.io/badge/Postman-FF6C37?style=flat-square&logo=postman&logoColor=white" alt="Postman">
+  <img src="https://img.shields.io/badge/REST_APIs-0f172a?style=flat-square&logo=fastapi&logoColor=white" alt="REST APIs">
+  <img src="https://img.shields.io/badge/CI/CD-222222?style=flat-square&logo=githubactions&logoColor=white" alt="CI/CD">
+  <img src="https://img.shields.io/badge/AI_Assisted_Dev-6e40c9?style=flat-square&logo=openai&logoColor=white" alt="AI Assisted Development">
+</p>
+
+<details>
+  <summary><strong>geek_mode.txt</strong></summary>
+  <br>
+  I enjoy debugging ugly production issues, tightening release workflows, refining UI details, and making cross-platform codebases easier to live in over time.
+</details>
+
+## `featured_projects`
+
+- [`wheel_slider`](https://pub.dev/packages/wheel_slider)  
+  A customizable Dart package for wheel-like scrolling interactions in Flutter apps.
+
+- [`Smart Water Tank Monitor`](https://github.com/srinivasa-dev/water-tank-monitor)  
+  An IoT system using ESP8266, ultrasonic sensing, and cloud-connected reporting.
+
+- [`link-in-bio`](https://github.com/srinivasa-dev/link-in-bio)  
+  A minimal and customizable link hub built with HTML, CSS, and JavaScript.
+
+- [`Flutter Instagram Clone`](https://github.com/srinivasa-dev/Flutter-Instagram-Clone)  
+  A Flutter UI project exploring app structure, layout depth, and interaction polish.
+
+- [`AI Face Generator`](https://github.com/srinivasa-dev/ai-face-generator)  
+  An experimental build combining Flutter and C++ for generated human faces.
+
+## `connect()`
+
+```ts
+const contact = {
+  portfolio: "https://srinivasa.dev/",
+  github: "https://github.com/srinivasa-dev",
+  linkedin: "https://www.linkedin.com/in/srinivasa-yadav/",
+  medium: "https://the-cybernaut.medium.com/",
+  email: "hello@srinivasa.dev"
+};
+```
+
+<p align="left">
+  <img src="https://komarev.com/ghpvc/?username=srinivasa-dev&label=Profile%20Views&color=111111&style=flat-square" alt="Profile views">
+  <img src="https://img.shields.io/github/followers/srinivasa-dev?label=Followers&style=flat-square&color=111111" alt="GitHub followers">
+  <img src="https://img.shields.io/github/last-commit/srinivasa-dev/srinivasa-dev?label=Last%20Update&style=flat-square&color=111111" alt="Last update">
+</p>
