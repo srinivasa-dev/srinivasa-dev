@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, follow">
+    <meta name="theme-color" content="#f4f1ea">
+    <title>404 | Srinivasa Yadav</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 2rem;
+            font-family: 'Sora', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(255, 255, 255, 0.82), transparent 34%),
+                linear-gradient(135deg, #f4f1ea 0%, #ece7db 100%);
+            color: #111111;
+        }
+
+        .error-shell {
+            width: min(100%, 720px);
+            padding: 3rem;
+            border: 1px solid rgba(17, 17, 17, 0.08);
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 24px 80px rgba(17, 17, 17, 0.08);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #7c7465;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
+            line-height: 0.95;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            max-width: 34rem;
+            color: #4f4a40;
+            font-size: 1.05rem;
+            line-height: 1.75;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 168px;
+            padding: 0.95rem 1.35rem;
+            border-radius: 999px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 160ms ease, background-color 160ms ease, border-color 160ms ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: #111111;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: #222222;
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(17, 17, 17, 0.12);
+            background: transparent;
+            color: #111111;
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(17, 17, 17, 0.24);
+        }
+
+        .footer-note {
+            margin-top: 2.25rem;
+            font-size: 0.9rem;
+            color: #7c7465;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1.25rem;
+            }
+
+            .error-shell {
+                padding: 2rem 1.4rem;
+                border-radius: 22px;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="error-shell">
+        <span class="eyebrow">Page Not Found</span>
+        <h1>404</h1>
+        <p>The page you were looking for does not exist, moved, or was never published here. The main portfolio and contact page are still available.</p>
+        <div class="actions">
+            <a class="btn btn-primary" href="/">Back to Home</a>
+            <a class="btn btn-secondary" href="/#contact">Contact Me</a>
+        </div>
+        <div class="footer-note">srinivasa.dev</div>
+    </main>
+</body>
+
+</html>
