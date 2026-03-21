@@ -62,6 +62,103 @@ function hasSuspiciousLinks(message) {
   return urls.length > 3;
 }
 
+function buildSubmissionRecord({ ip, name, email, message }) {
+  return {
+    ip,
+    name,
+    email,
+    message,
+    createdAt: new Date().toISOString(),
+    deliveryStatus: "pending",
+  };
+}
+
+function buildSubmissionKey(createdAt) {
+  const suffix =
+    typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : Math.random().toString(36).slice(2);
+
+  return `contact:${createdAt}:${suffix}`;
+}
+
+async function persistSubmission(env, key, record) {
+  if (!env.CONTACT_KV) {
+    return;
+  }
+
+  await env.CONTACT_KV.put(key, JSON.stringify(record));
+}
+
+async function enforceRateLimit(env, ip) {
+  if (!env.RATE_LIMIT) {
+    return null;
+  }
+
+  const rateLimitKey = `rate:${ip}`;
+  const currentRateCount = Number((await env.RATE_LIMIT.get(rateLimitKey)) || "0");
+
+  if (currentRateCount >= RATE_LIMIT_MAX_REQUESTS) {
+    return textResponse("Too many requests", 429);
+  }
+
+  await env.RATE_LIMIT.put(rateLimitKey, String(currentRateCount + 1), {
+    expirationTtl: RATE_LIMIT_WINDOW_SECONDS,
+  });
+
+  return null;
+}
+
+async function sendWithResend({ env, ip, name, email, message }) {
+  const toEmail = normalizeText(env.CONTACT_TO_EMAIL) || "hello@srinivasa.dev";
+  const fromEmail = normalizeText(env.CONTACT_FROM_EMAIL) || "noreply@srinivasa.dev";
+  const apiKey = normalizeText(env.RESEND_API_KEY) || normalizeText(env.APIKEYS_RESEND);
+  const submittedAt = new Date().toISOString();
+
+  if (!apiKey) {
+    return textResponse("Missing RESEND_API_KEY", 500);
+  }
+
+  const emailRes = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      from: `Website Contact <${fromEmail}>`,
+      to: [toEmail],
+      reply_to: email,
+      subject: `New portfolio inquiry from ${name}`,
+      text: `New contact form submission
+===========================
+
+From
+- Name: ${name}
+- Email: ${email}
+
+Submitted
+- Time: ${submittedAt}
+- IP: ${ip}
+
+Message
+-------
+${message}
+
+Reply
+-----
+Reply directly to this email to respond to ${name}.`,
+    }),
+  });
+
+  if (emailRes.ok) {
+    return null;
+  }
+
+  const upstreamText = normalizeText(await emailRes.text());
+  return textResponse(upstreamText || `Resend returned ${emailRes.status}`, 500);
+}
+
 export async function onRequestPost({ request, env }) {
   try {
     const ip = request.headers.get("CF-Connecting-IP");
@@ -83,20 +180,10 @@ export async function onRequestPost({ request, env }) {
       return textResponse("Forbidden", 403);
     }
 
-    if (!env.RATE_LIMIT) {
-      return textResponse("Server configuration error", 500);
+    const rateLimitResponse = await enforceRateLimit(env, ip);
+    if (rateLimitResponse) {
+      return rateLimitResponse;
     }
-
-    const rateLimitKey = `rate:${ip}`;
-    const currentRateCount = Number(await env.RATE_LIMIT.get(rateLimitKey) || "0");
-
-    if (currentRateCount >= RATE_LIMIT_MAX_REQUESTS) {
-      return textResponse("Too many requests", 429);
-    }
-
-    await env.RATE_LIMIT.put(rateLimitKey, String(currentRateCount + 1), {
-      expirationTtl: RATE_LIMIT_WINDOW_SECONDS,
-    });
 
     let data;
     try {
@@ -153,48 +240,35 @@ export async function onRequestPost({ request, env }) {
       return textResponse("Invalid submission", 400);
     }
 
-    const emailRes = await fetch("https://api.mailchannels.net/tx/v1/send", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        personalizations: [
-          {
-            to: [{ email: "hello@srinivasa.dev" }],
-          },
-        ],
-        from: {
-          email: "noreply@srinivasa.dev",
-          name: "Website Contact",
-        },
-        reply_to: [
-          {
-            email,
-            name,
-          },
-        ],
-        subject: "New Contact Message",
-        content: [
-          {
-            type: "text/plain",
-            value: `Name: ${name}
-Email: ${email}
-IP: ${ip}
-
-Message:
-${message}`,
-          },
-        ],
-      }),
+    const submissionRecord = buildSubmissionRecord({
+      ip,
+      name,
+      email,
+      message,
     });
+    const submissionKey = buildSubmissionKey(submissionRecord.createdAt);
+    await persistSubmission(env, submissionKey, submissionRecord);
 
-    if (!emailRes.ok) {
-      return textResponse("Failed to send email", 500);
+    const emailErrorResponse = await sendWithResend({
+      env,
+      ip,
+      name,
+      email,
+      message,
+    });
+    if (emailErrorResponse) {
+      submissionRecord.deliveryStatus = "failed";
+      await persistSubmission(env, submissionKey, submissionRecord);
+      return emailErrorResponse;
     }
 
+    submissionRecord.deliveryStatus = "sent";
+    await persistSubmission(env, submissionKey, submissionRecord);
+
     return textResponse("OK", 200);
-  } catch {
-    return textResponse("Server error", 500);
+  } catch (error) {
+    const message =
+      error instanceof Error && error.message ? error.message : "Server error";
+    return textResponse(message, 500);
   }
 }
