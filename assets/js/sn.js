@@ -34,6 +34,42 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastScrollY = window.scrollY;
     const navbar = document.querySelector('.navbar');
     const scrollTopButton = document.querySelector('.scroll-top');
+    const updateScrollTopTheme = () => {
+        if (!scrollTopButton || scrollTopButton.hidden) {
+            return;
+        }
+
+        const rect = scrollTopButton.getBoundingClientRect();
+        const x = Math.max(0, Math.min(window.innerWidth - 1, Math.round(rect.left + rect.width / 2)));
+        const y = Math.max(0, Math.min(window.innerHeight - 1, Math.round(rect.top + rect.height / 2)));
+
+        scrollTopButton.style.visibility = 'hidden';
+        const underlyingElement = document.elementFromPoint(x, y);
+        scrollTopButton.style.visibility = '';
+
+        let node = underlyingElement;
+        let backgroundColor = 'rgb(255, 255, 255)';
+
+        while (node && node !== document.body) {
+            const computed = window.getComputedStyle(node);
+            const color = computed.backgroundColor;
+
+            if (color && color !== 'rgba(0, 0, 0, 0)' && color !== 'transparent') {
+                backgroundColor = color;
+                break;
+            }
+
+            node = node.parentElement;
+        }
+
+        const match = backgroundColor.match(/\d+(\.\d+)?/g);
+        const [r, g, b] = match ? match.slice(0, 3).map(Number) : [255, 255, 255];
+        const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        const useLightButton = luminance < 0.45;
+
+        scrollTopButton.classList.toggle('is-light', useLightButton);
+        scrollTopButton.classList.toggle('is-dark', !useLightButton);
+    };
 
     window.addEventListener('scroll', () => {
         if (navbar && window.scrollY > lastScrollY && window.scrollY > 100) {
@@ -46,15 +82,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (scrollTopButton) {
             scrollTopButton.hidden = window.scrollY < 300;
+            updateScrollTopTheme();
         }
 
         lastScrollY = window.scrollY;
     });
 
     if (scrollTopButton) {
+        scrollTopButton.classList.add('is-light');
+        scrollTopButton.hidden = window.scrollY < 300;
         scrollTopButton.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+        window.addEventListener('resize', updateScrollTopTheme);
+        updateScrollTopTheme();
     }
 
     // Contact form
@@ -201,7 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (projectsList && projectsToggle) {
         const visibleProjectCards = Array.from(projectsList.querySelectorAll('.project-row'));
-        const initialVisibleCount = Number(projectsList.dataset.projectLimit || 6);
+        const initialVisibleCount = window.matchMedia('(max-width: 1024px)').matches
+            ? Number(projectsList.dataset.projectLimitMobile || 4)
+            : Number(projectsList.dataset.projectLimitDesktop || 6);
         const shouldCollapse = visibleProjectCards.length > initialVisibleCount;
 
         if (shouldCollapse) {
@@ -220,6 +263,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isExpanded = projectsList.classList.toggle('is-collapsed') === false;
                 projectsToggle.textContent = isExpanded ? 'Show less' : 'Show more';
                 projectsToggle.setAttribute('aria-expanded', String(isExpanded));
+            });
+        }
+    }
+
+    // Experience show more toggle
+    const experienceList = document.querySelector('.experience-list');
+    const experienceToggle = document.querySelector('.experience-toggle');
+
+    if (experienceList && experienceToggle) {
+        const experienceCards = Array.from(experienceList.querySelectorAll('.experience-card'));
+        const initialVisibleCount = Number(experienceList.dataset.experienceLimit || 3);
+        const shouldCollapse = experienceCards.length > initialVisibleCount;
+
+        if (shouldCollapse) {
+            experienceList.classList.add('is-collapsed');
+            experienceCards.forEach((card, index) => {
+                if (index >= initialVisibleCount) {
+                    card.classList.add('is-hidden');
+                }
+            });
+
+            experienceToggle.hidden = false;
+            experienceToggle.textContent = 'Show more';
+            experienceToggle.setAttribute('aria-expanded', 'false');
+
+            experienceToggle.addEventListener('click', () => {
+                const isExpanded = experienceList.classList.toggle('is-collapsed') === false;
+                experienceToggle.textContent = isExpanded ? 'Show less' : 'Show more';
+                experienceToggle.setAttribute('aria-expanded', String(isExpanded));
             });
         }
     }

@@ -173,9 +173,11 @@ img {
 }
 
 .nav-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    justify-content: space-between;
+    gap: 0.75rem;
+    position: relative;
 }
 
 .logo {
@@ -184,10 +186,13 @@ img {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .nav-links {
     display: flex;
+    justify-self: center;
     gap: 1.2rem;
     font-weight: 600;
     font-size: 0.95rem;
@@ -201,6 +206,8 @@ img {
     display: flex;
     align-items: center;
     gap: 0.6rem;
+    margin-left: auto;
+    flex-shrink: 0;
 }
 
 .btn {
@@ -296,7 +303,7 @@ img {
 .section-title {
     font-size: 3rem;
     font-weight: 400;
-    margin-bottom: 3rem;
+    margin-bottom: 2.25rem;
     text-align: center;
 }
 
@@ -359,6 +366,23 @@ img {
     color: #FFFFFF;
 }
 
+.skills-grid-compact {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.85rem;
+    max-width: none;
+    margin: 0;
+}
+
+.skills-grid-compact .skill-card {
+    min-height: 96px;
+    padding: 0.75rem;
+    font-size: 0.78rem;
+}
+
+.skills-grid-compact .skill-card i {
+    font-size: 1.65rem;
+}
+
 @media (max-width: 1024px) {
     .skills-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -385,6 +409,10 @@ img {
 .experience-card:hover {
     transform: translateY(-5px);
     border-color: #555555;
+}
+
+.experience-list.is-collapsed .experience-card.is-hidden {
+    display: none;
 }
 
 .exp-header {
@@ -442,7 +470,13 @@ img {
 
 .exp-desc {
     color: #CCCCCC;
-    line-height: 1.8;
+    line-height: 1.7;
+}
+
+.experience-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.25rem;
 }
 
 /* About Me */
@@ -468,6 +502,19 @@ img {
     font-size: 1.1rem;
 }
 
+.about-skills {
+    margin-top: 2rem;
+}
+
+.about-skills-heading {
+    margin-bottom: 1rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #666666;
+}
+
 .about-inline-link {
     display: inline-flex;
     align-items: center;
@@ -480,10 +527,10 @@ img {
 /* Beyond Code */
 .beyond-intro {
     max-width: 720px;
-    margin: 0 auto 2.5rem;
+    margin: 0 auto 1.75rem;
     text-align: center;
     color: #555555;
-    font-size: 1.1rem;
+    font-size: 1.02rem;
 }
 
 .beyond-grid {
@@ -495,13 +542,13 @@ img {
 .beyond-card {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    padding: 1.5rem;
+    gap: 1.1rem;
+    padding: 1.25rem;
     border-radius: 24px;
     text-decoration: none;
     color: inherit;
     border: 1px solid #E6E6E6;
-    background: #FAFAFA;
+    background: #FEFEFE;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
@@ -671,9 +718,9 @@ img {
     flex-direction: column;
     gap: 1.5rem;
     padding: 1.5rem;
-    border: 1px solid #333333;
+    border: 1px solid #D9D9D9;
     border-radius: 16px;
-    background: #0A0A0A;
+    background: #FAFAFA;
     height: 100%;
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
 }
@@ -686,15 +733,15 @@ img {
 .project-row:active,
 .project-row:focus-within {
     transform: translateY(-6px);
-    border-color: #666666;
-    background: #121212;
-    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.28);
+    border-color: #BDBDBD;
+    background: #FEFEFE;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
 }
 
 .project-row:hover .project-link,
 .project-row:active .project-link,
 .project-row:focus-within .project-link {
-    color: #AAAAAA;
+    color: #555555;
 }
 
 .project-info {
@@ -707,7 +754,7 @@ img {
     font-size: 2.5rem;
     font-weight: 800;
     margin-bottom: 0.75rem;
-    color: #FFFFFF;
+    color: #111111;
 }
 
 .project-title {
@@ -717,7 +764,7 @@ img {
 }
 
 .project-desc {
-    color: #CCCCCC;
+    color: #555555;
     font-size: 1rem;
     margin-bottom: 1.5rem;
     line-height: 1.7;
@@ -725,14 +772,14 @@ img {
 
 .project-link {
     font-size: 1.5rem;
-    color: #FFFFFF;
+    color: #111111;
     transition: color 0.3s;
     margin-top: auto;
     align-self: flex-start;
 }
 
 .project-link:hover {
-    color: #AAAAAA;
+    color: #555555;
 }
 
 .project-img-wrapper {
@@ -744,7 +791,7 @@ img {
 .project-media {
     width: 100%;
     aspect-ratio: 16 / 9;
-    background: #111111;
+    background: #F3F3F3;
     overflow: hidden;
 }
 
@@ -891,6 +938,20 @@ img {
 }
 
 .projects-toggle {
+    border: 1px solid #111111;
+    background: transparent;
+    color: #111111;
+    border-radius: 999px;
+    padding: 1rem 1.75rem;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background-color 0.25s, border-color 0.25s, color 0.25s, transform 0.25s;
+}
+
+.experience-toggle {
     border: 1px solid #444444;
     background: transparent;
     color: #FFFFFF;
@@ -903,10 +964,18 @@ img {
 }
 
 .projects-toggle:hover {
-    background: #FFFFFF;
-    color: #000000;
-    border-color: #FFFFFF;
+    background: #111111;
+    color: #FFFFFF;
+    border-color: #111111;
     transform: translateY(-1px);
+}
+
+.experience-toggle:hover {
+    background: #FFFFFF;
+    color: #111111;
+    border-color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.16);
 }
 
 .scroll-top {
@@ -925,16 +994,32 @@ img {
     box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
     cursor: pointer;
     z-index: 50;
-    mix-blend-mode: difference;
     transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
 }
 
-.scroll-top:hover {
+.scroll-top[hidden] {
+    display: none !important;
+}
+
+.scroll-top.is-dark {
+    background: #111111;
+    color: #FFFFFF;
+}
+
+.scroll-top.is-light {
     background: #FFFFFF;
+    color: #111111;
+}
+
+.scroll-top:hover {
     transform: translateY(-3px);
 }
 
 /* Contact Section */
+.contact-section-head .section-title {
+    margin-bottom: 1rem;
+}
+
 .contact-shell {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
@@ -1156,13 +1241,31 @@ img {
 
 /* Responsive */
 @media (max-width: 900px) {
+    .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .nav-container {
+        gap: 0.55rem;
+    }
+
+    .nav-actions .btn {
+        padding: 0.55rem 0.85rem;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
     .nav-links {
         display: flex;
         flex-direction: column;
         position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
+        top: calc(100% + 0.75rem);
+        left: 50%;
+        right: auto;
+        width: 100vw;
+        max-width: 100vw;
         gap: 0.35rem;
         padding: 0.75rem 1rem 1rem;
         background: #FFFFFF;
@@ -1172,20 +1275,21 @@ img {
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
-        transform: translateY(-10px);
+        transform: translateX(-50%) translateY(-10px);
         transform-origin: top center;
         transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
     }
 
     .hamburger {
         display: block;
+        flex-shrink: 0;
     }
 
     .nav-links.active {
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(0);
         z-index: 20;
     }
 
@@ -1309,6 +1413,10 @@ img {
         gap: 0.85rem;
     }
 
+    .skills-grid-compact {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .skill-card {
         min-height: 108px;
         padding: 0.8rem;
@@ -1322,16 +1430,56 @@ img {
         grid-template-columns: 1fr;
     }
 
+    #beyond-code.section {
+        padding-top: 56px;
+        padding-bottom: 56px;
+    }
+
+    .beyond-intro {
+        margin-bottom: 1.1rem;
+        font-size: 0.95rem;
+    }
+
+    .beyond-card {
+        gap: 0.85rem;
+        padding: 1rem;
+        border-radius: 18px;
+    }
+
+    .beyond-visual {
+        aspect-ratio: 16 / 7;
+        border-radius: 14px;
+    }
+
+    .beyond-card-cycling .beyond-visual {
+        aspect-ratio: 16 / 10;
+    }
+
+    .beyond-label {
+        font-size: 1.35rem;
+    }
+
+    .beyond-copy {
+        gap: 0.45rem;
+    }
+
+    .beyond-copy p {
+        font-size: 0.95rem;
+        line-height: 1.55;
+    }
+
     .beyond-intro,
     .contact-wrapper,
     .project-info,
-    .projects-actions {
+    .projects-actions,
+    .experience-actions {
         text-align: left;
     }
 
-    .projects-actions {
+    .projects-actions,
+    .experience-actions {
         margin-top: 2rem;
-        justify-content: flex-start;
+        justify-content: center;
     }
 
     .contact-shell {
@@ -1348,7 +1496,8 @@ img {
         width: 100%;
     }
 
-    .projects-toggle {
+    .projects-toggle,
+    .experience-toggle {
         width: 100%;
         max-width: 320px;
     }

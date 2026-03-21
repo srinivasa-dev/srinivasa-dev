@@ -25,7 +25,7 @@
     <meta property="og:image" content="https://srinivasa.dev/assets/imgs/social-preview.png">
     <meta property="og:image:secure_url" content="https://srinivasa.dev/assets/imgs/social-preview.png">
     <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:alt" content="Srinivasa Yadav portfolio preview">
     <meta name="twitter:card" content="summary_large_image">
@@ -128,8 +128,11 @@
         }
 
         .nav-container {
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            justify-content: initial;
             gap: 20px;
+            flex-wrap: nowrap;
         }
 
         .logo {
@@ -138,11 +141,13 @@
             font-weight: 700;
             text-decoration: none;
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .nav-links {
             display: flex;
             flex-wrap: wrap;
+            justify-self: center;
             gap: 18px;
             font-size: 0.95rem;
             font-weight: 600;
@@ -157,6 +162,8 @@
 
         .nav-actions {
             gap: 12px;
+            margin-left: auto;
+            flex-shrink: 0;
         }
 
         .btn {
@@ -176,7 +183,7 @@
         }
 
         .hamburger {
-            display: inline-flex;
+            display: none;
             align-items: center;
             justify-content: center;
             width: 42px;
@@ -245,18 +252,78 @@
         }
 
         @media (max-width: 900px) {
-            .nav-container,
+            .nav-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
             .hero-content-wrapper {
                 flex-direction: column;
                 align-items: flex-start;
             }
 
             .nav-links {
-                gap: 14px;
+                position: absolute;
+                top: calc(100% + 0.75rem);
+                left: 50%;
+                right: auto;
+                width: 100vw;
+                max-width: 100vw;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                padding: 12px 16px 16px;
+                background: #ffffff;
+                border-top: 1px solid #ece7de;
+                border-bottom: 1px solid #ece7de;
+                box-shadow: 0 16px 28px rgba(0, 0, 0, 0.08);
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transform: translateX(-50%) translateY(-10px);
+                transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+                z-index: 20;
+            }
+
+            .nav-container {
+                gap: 10px;
             }
 
             .nav-actions {
-                width: 100%;
+                width: auto;
+            }
+
+            .nav-actions .btn {
+                padding: 9px 14px;
+                font-size: 0.9rem;
+                white-space: nowrap;
+            }
+
+            .hamburger {
+                display: inline-flex;
+                flex-shrink: 0;
+            }
+
+            .nav-links.active {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            .nav-links a {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 14px 4px;
+                border-bottom: 1px solid #f0ebe3;
+                font-size: 1rem;
+                font-weight: 700;
+            }
+
+            .nav-links a:last-child {
+                border-bottom: none;
             }
 
             .hero-img-box img {
@@ -437,7 +504,7 @@
             <nav class="nav-links">
                 <a href="#about">About Me</a>
                 <a href="#skills">Skills</a>
-                <a href="#projects">Project</a>
+                <a href="#projects">Projects</a>
                 <a href="#beyond-code" class="mobile-only-nav">Beyond Code</a>
                 <a href="#contact">Contact Me</a>
             </nav>
@@ -486,54 +553,72 @@
         </div>
     </div>
 
-    <!-- Skills Section -->
-    <section id="skills" class="section bg-white">
-        <div class="container">
-            <h2 class="section-title">My <span class="fw-bold">Skills</span></h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <i class="devicon-flutter-plain"></i>
-                    <span>Flutter</span>
-                </div>
-                <div class="skill-card">
-                    <i class="devicon-dart-plain"></i>
-                    <span>Dart</span>
-                </div>
-                <div class="skill-card">
-                    <i class="devicon-typescript-plain"></i>
-                    <span>TypeScript</span>
-                </div>
-                <div class="skill-card">
-                    <i class="devicon-javascript-plain"></i>
-                    <span>JavaScript</span>
-                </div>
-                <div class="skill-card">
-                    <i class="devicon-html5-plain"></i>
-                    <span>HTML/CSS</span>
-                </div>
-                <div class="skill-card">
-                    <i class="devicon-mysql-plain"></i>
-                    <span>MySQL</span>
-                </div>
-                <div class="skill-card">
-                    <i class="devicon-git-plain"></i>
-                    <span>Git</span>
-                </div>
-                <div class="skill-card">
-                    <i class="fas fa-robot"></i>
-                    <span>AI-Assisted Dev</span>
-                </div>
-                <div class="skill-card">
-                    <i class="fas fa-plug"></i>
-                    <span>REST APIs</span>
-                </div>
-                <div class="skill-card">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>CI/CD Automation</span>
-                </div>
-                <div class="skill-card">
-                    <i class="fas fa-cloud"></i>
-                    <span>Serverless APIs</span>
+    <!-- About Me Section -->
+    <section id="about" class="section bg-white">
+        <div class="container about-wrapper">
+            <div class="about-img">
+                <img src="assets/imgs/about_boy.png" alt="About Me Illustration">
+            </div>
+            <div class="about-text">
+                <h2 class="section-title" style="text-align: left;">About <span class="fw-bold">Me</span></h2>
+                <p>
+                    I'm a Flutter and Web developer with a background in Computer Science and a focus on building
+                    thoughtful, performant products. I hold a B.E in Information Science & Engineering.
+                </p>
+                <p>
+                    I specialize in state management, Firebase integration, REST APIs, and CI/CD automation. My work
+                    spans consumer apps, internal tooling, backend integrations, and polished cross-platform
+                    experiences built to ship.
+                </p>
+                <p>
+                    Outside work, I spend time <a href="#beyond-code" class="about-inline-link">cycling</a>,
+                    gaming, and practicing <a href="#beyond-code" class="about-inline-link">photography</a>.
+                    I speak English, Kannada, Telugu, and Hindi, and I enjoy collaborating on open-source work.
+                </p>
+                <div id="skills" class="about-skills">
+                    <div class="about-skills-heading">Core Skills</div>
+                    <div class="skills-grid skills-grid-compact">
+                        <div class="skill-card">
+                            <i class="devicon-flutter-plain"></i>
+                            <span>Flutter</span>
+                        </div>
+                        <div class="skill-card">
+                            <i class="devicon-dart-plain"></i>
+                            <span>Dart</span>
+                        </div>
+                        <div class="skill-card">
+                            <i class="devicon-typescript-plain"></i>
+                            <span>TypeScript</span>
+                        </div>
+                        <div class="skill-card">
+                            <i class="devicon-javascript-plain"></i>
+                            <span>JavaScript</span>
+                        </div>
+                        <div class="skill-card">
+                            <i class="devicon-html5-plain"></i>
+                            <span>HTML/CSS</span>
+                        </div>
+                        <div class="skill-card">
+                            <i class="devicon-mysql-plain"></i>
+                            <span>MySQL</span>
+                        </div>
+                        <div class="skill-card">
+                            <i class="devicon-git-plain"></i>
+                            <span>Git</span>
+                        </div>
+                        <div class="skill-card">
+                            <i class="fas fa-plug"></i>
+                            <span>REST APIs</span>
+                        </div>
+                        <div class="skill-card">
+                            <i class="fas fa-cloud"></i>
+                            <span>Serverless APIs</span>
+                        </div>
+                        <div class="skill-card">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>CI/CD</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -549,7 +634,7 @@
     <section id="experience" class="section bg-black">
         <div class="container">
             <h2 class="section-title">My <span class="fw-bold">Experience</span></h2>
-            <div class="experience-list">
+            <div class="experience-list" data-experience-limit="3">
 
                 <div class="experience-card">
                     <div class="exp-header">
@@ -564,10 +649,8 @@
                         <div class="exp-date">Dec 2024 - Present</div>
                     </div>
                     <p class="exp-desc">
-                        Architected and built Flutter applications from the ground up, crafting scalable, efficient,
-                        and maintainable code while defining the project's core structure. Actively contributing to
-                        team success, debugging complex issues, optimizing performance, and sharing deep Flutter
-                        insights to elevate development workflows.
+                        Architect and build Flutter applications from the ground up, focusing on scalable structure,
+                        performance, and maintainable development workflows.
                     </p>
                 </div>
 
@@ -584,11 +667,8 @@
                         <div class="exp-date">May 2023 - Dec 2024</div>
                     </div>
                     <p class="exp-desc">
-                        Developed and managed the entire partner-side Flutter application, leading end-to-end
-                        deployment and release management. Optimized app performance, achieving a 40% reduction in
-                        load times and a 20% increase in user engagement. Led debugging efforts, resolving 90% of
-                        reported issues within 24 hours and significantly improving development cycles. Expanded
-                        backend expertise, building scalable server-side functions in TypeScript and Node.js.
+                        Led the partner-side Flutter app end to end, improving performance, accelerating issue
+                        resolution, and building supporting backend functions with TypeScript and Node.js.
                     </p>
                 </div>
 
@@ -605,9 +685,8 @@
                         <div class="exp-date">Jul 2022 - Jan 2023</div>
                     </div>
                     <p class="exp-desc">
-                        Developed and delivered high-performance Flutter applications, improving load speed by 30%.
-                        Led efficient development practices, achieving faster development cycles and enhanced user
-                        experiences.
+                        Built high-performance Flutter applications and improved delivery speed through more efficient
+                        development practices.
                     </p>
                 </div>
 
@@ -624,10 +703,8 @@
                         <div class="exp-date">Sep 2020 - Feb 2022</div>
                     </div>
                     <p class="exp-desc">
-                        Developed project concepts and maintained optimal workflow. Worked with senior developers to
-                        manage large, complex design projects for corporate clients. Completed sophisticated
-                        programming and development work for websites, public mobile apps built with Flutter, and
-                        Django-based back-end code.
+                        Delivered websites, Flutter apps, and Django-backed features while supporting large client
+                        projects and day-to-day development workflow.
                     </p>
                 </div>
 
@@ -644,46 +721,23 @@
                         <div class="exp-date">Jan 2020 - Apr 2020</div>
                     </div>
                     <p class="exp-desc">
-                        Developed a project based on thermal management by creating and handling the database.
+                        Built a thermal management project focused on database design and handling.
                     </p>
                 </div>
 
             </div>
-        </div>
-    </section>
-
-    <!-- About Me Section -->
-    <section id="about" class="section bg-white">
-        <div class="container about-wrapper">
-            <div class="about-img">
-                <img src="assets/imgs/about_boy.png" alt="About Me Illustration">
-            </div>
-            <div class="about-text">
-                <h2 class="section-title" style="text-align: left;">About <span class="fw-bold">Me</span></h2>
-                <p>
-                    I'm a Flutter and Web developer with a background in Computer Science and a passion for crafting
-                    engaging digital experiences ✨. I hold a B.E in Information Science & Engineering 🎓.
-                </p>
-                <p>
-                    I specialize in state management (Bloc, Provider, GetX), Firebase integration 🔥, REST APIs, and
-                    CI/CD automation ⚙️. I have developed a wide range of applications that provide seamless user
-                    experiences with real-time data processing and visually appealing interfaces.
-                </p>
-                <p>
-                    Outside work, I spend time <a href="#beyond-code" class="about-inline-link">🚴 cycling</a>,
-                    gaming 🎮, and practicing <a href="#beyond-code" class="about-inline-link">📸 photography</a>.
-                    I speak English, Kannada, Telugu, and Hindi, and I love collaborating on OpenSource projects 🌍.
-                </p>
+            <div class="experience-actions">
+                <button type="button" class="experience-toggle" aria-expanded="false" hidden>Show more</button>
             </div>
         </div>
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="section bg-black">
+    <section id="projects" class="section bg-white">
         <div class="container">
-            <h2 class="section-title" style="color:#FFF;">My <span class="fw-bold">Projects</span></h2>
+            <h2 class="section-title">My <span class="fw-bold">Projects</span></h2>
 
-            <div class="projects-list" data-project-limit="6">
+            <div class="projects-list" data-project-limit-mobile="4" data-project-limit-desktop="6">
 
                 <div class="project-row" data-project-url="https://pub.dev/packages/wheel_slider" role="link" tabindex="0" aria-label="Open wheel_slider project">
                     <div class="project-img-wrapper">
@@ -854,7 +908,7 @@
         </div>
     </section>
 
-    <div class="section-divider section-divider-dark" aria-hidden="true">
+    <div class="section-divider section-divider-light" aria-hidden="true">
         <div class="container">
             <span class="section-divider-line"></span>
         </div>
@@ -902,6 +956,9 @@
 
     <!-- Contact & Footer -->
     <section id="contact" class="section bg-white" style="padding-bottom: 0; min-height: auto;">
+        <div class="container contact-section-head">
+            <h2 class="section-title">Contact <span class="fw-bold">Me</span></h2>
+        </div>
         <div class="container contact-shell" style="padding-top: 6rem; padding-bottom: 6rem;">
             <form class="contact-form" id="contact-form">
                 <input type="text" name="company" class="contact-honeypot" tabindex="-1" autocomplete="off"
