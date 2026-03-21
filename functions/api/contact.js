@@ -71,9 +71,8 @@ function hasSuspiciousLinks(message) {
   return urls.length > 3;
 }
 
-function buildSubmissionRecord({ ip, name, email, message }) {
+function buildSubmissionRecord({ name, email, message }) {
   return {
-    ip,
     name,
     email,
     message,
@@ -125,7 +124,6 @@ async function sendWithResend({ env, ip, name, email, message }) {
   const submittedAt = new Date().toISOString();
   const escapedName = escapeHtml(name);
   const escapedEmail = escapeHtml(email);
-  const escapedIp = escapeHtml(ip);
   const escapedSubmittedAt = escapeHtml(submittedAt);
   const escapedMessage = escapeHtml(message).replace(/\n/g, "<br>");
 
@@ -168,10 +166,6 @@ async function sendWithResend({ env, ip, name, email, message }) {
           <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:12px;color:#8a7f70;text-transform:uppercase;letter-spacing:0.08em;">Time</td>
           <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:15px;color:#111111;">${escapedSubmittedAt}</td>
         </tr>
-        <tr>
-          <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:12px;color:#8a7f70;text-transform:uppercase;letter-spacing:0.08em;">IP</td>
-          <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:15px;color:#111111;">${escapedIp}</td>
-        </tr>
       </table>
       <div style="font-size:12px;color:#8a7f70;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.12em;">Message</div>
       <div style="padding:22px 22px;border-radius:18px;background:#fcfaf6;border:1px solid #f0eadf;font-size:16px;line-height:1.75;color:#111111;">${escapedMessage}</div>
@@ -187,7 +181,6 @@ From
 
 Submitted
 - Time: ${submittedAt}
-- IP: ${ip}
 
 Message
 -------
@@ -289,7 +282,6 @@ export async function onRequestPost({ request, env }) {
     }
 
     const submissionRecord = buildSubmissionRecord({
-      ip,
       name,
       email,
       message,
