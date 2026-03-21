@@ -36,6 +36,263 @@
     <meta name="twitter:image:alt" content="Srinivasa Yadav portfolio preview">
     <meta name="application-name" content="Srinivasa">
     <title>Srinivasa Yadav | Flutter Developer Portfolio</title>
+    <style>
+        html {
+            background: #ffffff;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .boot-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: #ffffff;
+            color: #111111;
+            font-family: 'Sora', sans-serif;
+        }
+
+        .boot-loader[hidden] {
+            display: none;
+        }
+
+        .boot-loader-card {
+            max-width: 320px;
+            text-align: center;
+        }
+
+        .boot-loader-spinner {
+            width: 42px;
+            height: 42px;
+            margin: 0 auto 16px;
+            border: 3px solid #e5e7eb;
+            border-top-color: #111111;
+            border-radius: 999px;
+            animation: boot-spin 0.8s linear infinite;
+        }
+
+        .boot-loader-title {
+            margin: 0 0 8px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .boot-loader-copy {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .boot-loader-actions {
+            margin-top: 16px;
+        }
+
+        .boot-loader-refresh {
+            border: 0;
+            border-radius: 999px;
+            padding: 10px 16px;
+            background: #111111;
+            color: #ffffff;
+            font: inherit;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            padding: 16px 0;
+            background: #ffffff;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .nav-container,
+        .nav-actions,
+        .hero-content-wrapper,
+        .hero-social {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container {
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            color: #111111;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .nav-links a,
+        .social-icon,
+        .email-link {
+            color: #111111;
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #111111;
+            color: #ffffff;
+        }
+
+        .hamburger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #111111;
+        }
+
+        .section {
+            padding: 96px 0;
+        }
+
+        #hero {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content-wrapper {
+            justify-content: space-between;
+            gap: 48px;
+        }
+
+        .hero-text,
+        .hero-img-box {
+            flex: 1;
+        }
+
+        .hero-greeting,
+        .hero-title,
+        .hero-description {
+            margin: 0;
+        }
+
+        .hero-greeting {
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            line-height: 0.95;
+            margin-bottom: 24px;
+        }
+
+        .hero-description {
+            max-width: 680px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #303030;
+            margin-bottom: 24px;
+        }
+
+        .hero-social {
+            gap: 16px;
+            font-size: 1.5rem;
+        }
+
+        .hero-img-box img {
+            width: 100%;
+            max-width: 620px;
+            margin-left: auto;
+        }
+
+        @media (max-width: 900px) {
+            .nav-container,
+            .hero-content-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                gap: 14px;
+            }
+
+            .nav-actions {
+                width: 100%;
+            }
+
+            .hero-img-box img {
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .section {
+                padding: 72px 0;
+            }
+
+            .nav-links {
+                font-size: 0.9rem;
+                gap: 12px;
+            }
+
+            .btn {
+                padding: 9px 14px;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+            }
+        }
+
+        @keyframes boot-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -73,6 +330,79 @@
             ]
         }
     </script>
+    <script>
+        (function () {
+            const boot = {
+                hasFailed: false,
+                isVisible: false,
+                revealTimeoutId: null,
+                timeoutId: null,
+                show() {
+                    if (boot.isVisible) {
+                        return;
+                    }
+
+                    const loader = document.querySelector('[data-boot-loader]');
+                    if (loader) {
+                        loader.hidden = false;
+                        boot.isVisible = true;
+                    }
+                },
+                markReady() {
+                    if (boot.hasFailed) {
+                        return;
+                    }
+
+                    const loader = document.querySelector('[data-boot-loader]');
+                    if (loader) {
+                        loader.hidden = true;
+                    }
+                    boot.isVisible = false;
+                    if (boot.revealTimeoutId) {
+                        clearTimeout(boot.revealTimeoutId);
+                    }
+                    if (boot.timeoutId) {
+                        clearTimeout(boot.timeoutId);
+                    }
+                },
+                markFailed(message) {
+                    boot.hasFailed = true;
+                    boot.show();
+                    const title = document.querySelector('[data-boot-title]');
+                    const copy = document.querySelector('[data-boot-copy]');
+                    const actions = document.querySelector('[data-boot-actions]');
+
+                    if (title) {
+                        title.textContent = 'Having trouble loading the page';
+                    }
+                    if (copy) {
+                        copy.textContent = message || 'Please refresh the page and try again.';
+                    }
+                    if (actions) {
+                        actions.hidden = false;
+                    }
+                }
+            };
+
+            window.__appBoot = boot;
+
+            window.addEventListener('load', () => {
+                window.setTimeout(() => boot.markReady(), 0);
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                boot.revealTimeoutId = window.setTimeout(() => {
+                    boot.show();
+                }, 1200);
+
+                boot.timeoutId = window.setTimeout(() => {
+                    if (!boot.hasFailed) {
+                        boot.markFailed('This is taking longer than expected. Please refresh the page and try again.');
+                    }
+                }, 7000);
+            });
+        })();
+    </script>
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap">
     <!-- Font Awesome -->
@@ -80,10 +410,20 @@
     <!-- Devicon for precise skill icons -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/sn.css">
+    <link rel="stylesheet" href="/assets/css/sn.css?v=20260321" onerror="window.__appBoot?.markFailed('We could not load the page properly. Please refresh and try again.')">
 </head>
 
 <body>
+    <div class="boot-loader" data-boot-loader hidden>
+        <div class="boot-loader-card">
+            <div class="boot-loader-spinner" aria-hidden="true"></div>
+            <p class="boot-loader-title" data-boot-title>Loading the page…</p>
+            <p class="boot-loader-copy" data-boot-copy>Please wait a moment.</p>
+            <div class="boot-loader-actions" data-boot-actions hidden>
+                <button type="button" class="boot-loader-refresh" onclick="window.location.reload()">Refresh</button>
+            </div>
+        </div>
+    </div>
     <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;">
         Srinivasa Yadav, also known as Srinivasa, is a Flutter developer portfolio website.
     </div>
@@ -621,10 +961,10 @@
     </button>
 
     <!-- Scripts -->
-    <script src="assets/js/sn.js"></script>
-    <script type="module" src="assets/js/firebase.js"></script>
+    <script src="/assets/js/sn.js?v=20260321" onerror="window.__appBoot?.markFailed('We could not load the page properly. Please refresh and try again.')"></script>
+    <script type="module" src="/assets/js/firebase.js?v=20260321"></script>
     <script type="module">
-        import { CLARITY_KEY } from './assets/js/apikeys.js';
+        import { CLARITY_KEY } from '/assets/js/apikeys.js?v=20260321';
 
         if (CLARITY_KEY) {
             (function (c, l, a, r, i, t, y) {
