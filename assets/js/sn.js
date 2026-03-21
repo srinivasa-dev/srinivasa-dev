@@ -64,6 +64,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contactForm && contactStatus) {
         const formStartedAtField = contactForm.querySelector('input[name="form_started_at"]');
         const minimumFillTimeMs = 4000;
+        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const nameField = contactForm.querySelector('input[name="name"]');
+        const emailField = contactForm.querySelector('input[name="email"]');
+        const messageField = contactForm.querySelector('textarea[name="message"]');
+        const requiredFields = [nameField, emailField, messageField].filter(Boolean);
+
+        const setStatus = (message, type) => {
+            contactStatus.textContent = message;
+            contactStatus.classList.remove('is-loading', 'is-success', 'is-error');
+            contactStatus.hidden = !message;
+
+            if (message && type) {
+                contactStatus.classList.add(`is-${type}`);
+            }
+        };
+
+        const clearFieldErrors = () => {
+            requiredFields.forEach(field => field.classList.remove('is-error'));
+        };
+
+        const markMissingFields = () => {
+            if (!nameField?.value.trim()) nameField?.classList.add('is-error');
+            if (!emailField?.value.trim()) emailField?.classList.add('is-error');
+            if (!messageField?.value.trim()) messageField?.classList.add('is-error');
+        };
+
+        const setLoadingState = isLoading => {
+            contactForm.classList.toggle('is-loading', isLoading);
+
+            if (submitButton) {
+                submitButton.disabled = isLoading;
+                submitButton.textContent = isLoading ? 'Sending...' : 'Get In Touch';
+            }
+        };
+
+        requiredFields.forEach(field => {
+            field.addEventListener('input', () => {
+                if (field.value.trim()) {
+                    field.classList.remove('is-error');
+                }
+            });
+        });
+
+        setStatus('');
 
         if (formStartedAtField) {
             formStartedAtField.value = String(Date.now());
@@ -72,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
         contactForm.addEventListener('submit', async event => {
             event.preventDefault();
 
-            const submitButton = contactForm.querySelector('button[type="submit"]');
             const formData = new FormData(contactForm);
             const startedAtRaw = formData.get('form_started_at')?.toString().trim();
             const startedAt = Number(startedAtRaw || '0');
@@ -84,22 +127,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 website: formData.get('website')?.toString().trim(),
                 formStartedAt: startedAtRaw
             };
+            clearFieldErrors();
 
             if (!payload.name || !payload.email || !payload.message) {
-                contactStatus.textContent = 'Please complete all required fields.';
+                markMissingFields();
+                setStatus('Fill required fields.', 'error');
                 return;
             }
 
             if (!startedAt || Date.now() - startedAt < minimumFillTimeMs) {
-                contactStatus.textContent = 'Please take a moment and try again.';
+                setStatus('Try again in a moment.', 'error');
                 return;
             }
 
-            contactStatus.textContent = 'Sending message...';
-
-            if (submitButton) {
-                submitButton.disabled = true;
-            }
+            setStatus('Sending...', 'loading');
+            setLoadingState(true);
 
             try {
                 const response = await fetch('/api/contact', {
@@ -119,13 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (formStartedAtField) {
                     formStartedAtField.value = String(Date.now());
                 }
-                contactStatus.textContent = 'Message sent successfully.';
+                clearFieldErrors();
+                setStatus('Sent.', 'success');
             } catch (error) {
-                contactStatus.textContent = error.message || 'Failed to send message.';
+                setStatus(error.message || 'Send failed.', 'error');
             } finally {
-                if (submitButton) {
-                    submitButton.disabled = false;
-                }
+                setLoadingState(false);
             }
         });
     }

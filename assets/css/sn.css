@@ -999,11 +999,12 @@ img {
 .contact-field textarea {
     width: 100%;
     border: 1.5px solid #3B3B3B;
-    background: transparent;
+    background: #FFFFFF;
     color: #111111;
     padding: 1rem 1.1rem;
     font: inherit;
     outline: none;
+    transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
 }
 
 .contact-field input::placeholder,
@@ -1019,6 +1020,14 @@ img {
 .contact-field input:focus,
 .contact-field textarea:focus {
     border-color: #111111;
+    box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.06);
+}
+
+.contact-field input.is-error,
+.contact-field textarea.is-error {
+    border: 2px solid #D92D20;
+    box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.12);
+    background: #FFF7F7;
 }
 
 .contact-honeypot {
@@ -1043,16 +1052,44 @@ img {
     padding: 1rem 1.4rem;
     font: inherit;
     font-weight: 700;
+    min-width: 168px;
+    transition: background-color 160ms ease, opacity 160ms ease;
 }
 
 .contact-submit:hover {
     background: #222222;
 }
 
+.contact-submit:disabled {
+    cursor: wait;
+    opacity: 0.88;
+}
+
 .contact-status {
-    min-height: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.25rem;
+    padding: 0.1rem 0;
     color: #666666;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.contact-status[hidden] {
+    display: none;
+}
+
+.contact-status.is-loading {
+    color: #444444;
+}
+
+.contact-status.is-success {
+    color: #216E39;
+}
+
+.contact-status.is-error {
+    color: #B42318;
 }
 
 /* Footer Section */

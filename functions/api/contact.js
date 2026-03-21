@@ -23,6 +23,15 @@ function normalizeText(value) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -114,6 +123,11 @@ async function sendWithResend({ env, ip, name, email, message }) {
   const fromEmail = normalizeText(env.CONTACT_FROM_EMAIL) || "noreply@srinivasa.dev";
   const apiKey = normalizeText(env.RESEND_API_KEY) || normalizeText(env.APIKEYS_RESEND);
   const submittedAt = new Date().toISOString();
+  const escapedName = escapeHtml(name);
+  const escapedEmail = escapeHtml(email);
+  const escapedIp = escapeHtml(ip);
+  const escapedSubmittedAt = escapeHtml(submittedAt);
+  const escapedMessage = escapeHtml(message).replace(/\n/g, "<br>");
 
   if (!apiKey) {
     return textResponse("Missing RESEND_API_KEY", 500);
@@ -130,6 +144,40 @@ async function sendWithResend({ env, ip, name, email, message }) {
       to: [toEmail],
       reply_to: email,
       subject: `New portfolio inquiry from ${name}`,
+      html: `<div style="margin:0;padding:40px 20px;background:#f3f1ec;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111111;">
+  <div style="max-width:680px;margin:0 auto;background:#ffffff;border:1px solid #ebe6dc;border-radius:24px;overflow:hidden;box-shadow:0 16px 40px rgba(17,17,17,0.06);">
+    <div style="padding:34px 34px 18px;">
+      <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8a7f70;margin-bottom:14px;">Portfolio Contact</div>
+      <h1 style="margin:0;font-size:28px;line-height:1.25;color:#111111;font-weight:700;">New inquiry from ${escapedName}</h1>
+    </div>
+    <div style="padding:0 34px 34px;">
+      <div style="margin-bottom:28px;padding:18px 20px;background:#f8f5ef;border:1px solid #efe7da;border-radius:18px;">
+        <div style="font-size:12px;color:#8a7f70;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.12em;">Reply to</div>
+        <a href="mailto:${escapedEmail}" style="display:inline-block;padding:12px 18px;border-radius:999px;background:#111111;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;">${escapedEmail}</a>
+      </div>
+      <table role="presentation" style="width:100%;border-collapse:collapse;margin-bottom:28px;">
+        <tr>
+          <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:12px;color:#8a7f70;width:120px;text-transform:uppercase;letter-spacing:0.08em;">Name</td>
+          <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:15px;color:#111111;">${escapedName}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:12px;color:#8a7f70;text-transform:uppercase;letter-spacing:0.08em;">Email</td>
+          <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:15px;color:#111111;">${escapedEmail}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:12px;color:#8a7f70;text-transform:uppercase;letter-spacing:0.08em;">Time</td>
+          <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:15px;color:#111111;">${escapedSubmittedAt}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:12px;color:#8a7f70;text-transform:uppercase;letter-spacing:0.08em;">IP</td>
+          <td style="padding:12px 0;border-top:1px solid #f2eee6;font-size:15px;color:#111111;">${escapedIp}</td>
+        </tr>
+      </table>
+      <div style="font-size:12px;color:#8a7f70;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.12em;">Message</div>
+      <div style="padding:22px 22px;border-radius:18px;background:#fcfaf6;border:1px solid #f0eadf;font-size:16px;line-height:1.75;color:#111111;">${escapedMessage}</div>
+    </div>
+  </div>
+</div>`,
       text: `New contact form submission
 ===========================
 
