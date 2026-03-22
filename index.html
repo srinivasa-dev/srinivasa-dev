@@ -22,8 +22,8 @@
     <meta property="og:title" content="Srinivasa Yadav | Flutter Developer">
     <meta property="og:description"
         content="Flutter developer portfolio featuring mobile apps, web projects, experience, and personal work in cycling and photography.">
-    <meta property="og:image" content="https://srinivasa.dev/assets/imgs/social-preview.png">
-    <meta property="og:image:secure_url" content="https://srinivasa.dev/assets/imgs/social-preview.png">
+    <meta property="og:image" content="https://srinivasa.dev/assets/imgs/social-preview.jpg">
+    <meta property="og:image:secure_url" content="https://srinivasa.dev/assets/imgs/social-preview.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:type" content="image/png">
@@ -32,7 +32,7 @@
     <meta name="twitter:title" content="Srinivasa Yadav | Flutter Developer">
     <meta name="twitter:description"
         content="Flutter developer portfolio featuring mobile apps, web projects, experience, and personal work in cycling and photography.">
-    <meta name="twitter:image" content="https://srinivasa.dev/assets/imgs/social-preview.png">
+    <meta name="twitter:image" content="https://srinivasa.dev/assets/imgs/social-preview.jpg">
     <meta name="twitter:image:alt" content="Srinivasa Yadav portfolio preview">
     <meta name="application-name" content="Srinivasa">
     <title>Srinivasa Yadav | Flutter Developer Portfolio</title>
@@ -136,12 +136,25 @@
         }
 
         .logo {
+            display: inline-flex;
+            align-items: center;
             color: #111111;
             font-size: 1.25rem;
             font-weight: 700;
             text-decoration: none;
             white-space: nowrap;
             flex-shrink: 0;
+        }
+
+        .logo-text {
+            display: inline-block;
+            transition: opacity 220ms ease, transform 220ms ease;
+            will-change: opacity, transform;
+        }
+
+        .logo-text.is-switching {
+            opacity: 0;
+            transform: translateY(4px);
         }
 
         .nav-links {
@@ -370,7 +383,7 @@
                     "alternateName": "Srinivasa",
                     "url": "https://srinivasa.dev/",
                     "jobTitle": "Flutter Developer",
-                    "image": "https://srinivasa.dev/assets/imgs/social-preview.png",
+                    "image": "https://srinivasa.dev/assets/imgs/social-preview.jpg",
                     "description": "Srinivasa Yadav is a Flutter developer building scalable mobile and web experiences.",
                     "worksFor": {
                         "@type": "Organization",
@@ -498,8 +511,8 @@
     <!-- Navigation -->
     <header class="navbar bg-white">
         <div class="container nav-container">
-            <a href="#" class="logo">
-                Srinivasa.
+            <a href="#" class="logo" data-brand-name>
+                <span class="logo-text">Sn.</span>
             </a>
             <nav class="nav-links">
                 <a href="#about">About Me</a>
@@ -522,7 +535,7 @@
     <section id="hero" class="section bg-white">
         <div class="container hero-content-wrapper">
             <div class="hero-text">
-                <h2 class="hero-greeting"><span class="fw-regular">Hello I'm</span> <span class="fw-bold">Srinivasa Yadav.</span></h2>
+                <h2 class="hero-greeting"><span class="fw-bold">Srinivasa Yadav.</span></h2>
                 <h1 class="hero-title"><span class="fw-bold">Flutter</span> <span class="outlined-text">Developer</span>
                 </h1>
                 <p class="hero-description">
