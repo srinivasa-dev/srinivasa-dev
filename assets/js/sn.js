@@ -33,7 +33,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hide navbar on scroll down
     let lastScrollY = window.scrollY;
     const navbar = document.querySelector('.navbar');
+    const brandName = document.querySelector('[data-brand-name]');
+    const brandNameText = brandName?.querySelector('.logo-text') || brandName;
     const scrollTopButton = document.querySelector('.scroll-top');
+    const brandSwitchThreshold = 180;
+    let activeBrandName = '';
+    const setInitialBrandName = () => {
+        if (!brandNameText) {
+            return;
+        }
+
+        activeBrandName = window.scrollY < brandSwitchThreshold ? 'Sn.' : 'Srinivasa.';
+        brandNameText.textContent = activeBrandName;
+    };
+
+    const updateBrandName = () => {
+        if (!brandNameText) {
+            return;
+        }
+
+        const nextBrandName = window.scrollY < brandSwitchThreshold ? 'Sn.' : 'Srinivasa.';
+
+        if (nextBrandName === activeBrandName) {
+            return;
+        }
+
+        activeBrandName = nextBrandName;
+        brandNameText.classList.add('is-switching');
+
+        window.setTimeout(() => {
+            brandNameText.textContent = nextBrandName;
+            brandNameText.classList.remove('is-switching');
+        }, 110);
+    };
+
     const updateScrollTopTheme = () => {
         if (!scrollTopButton || scrollTopButton.hidden) {
             return;
@@ -80,6 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
             navbar.classList.remove('nav-hidden');
         }
 
+        updateBrandName();
+
         if (scrollTopButton) {
             scrollTopButton.hidden = window.scrollY < 300;
             updateScrollTopTheme();
@@ -97,6 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('resize', updateScrollTopTheme);
         updateScrollTopTheme();
     }
+
+    setInitialBrandName();
 
     // Contact form
     const contactForm = document.querySelector('#contact-form');
