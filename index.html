@@ -519,6 +519,9 @@
                 <a href="#skills">Skills</a>
                 <a href="#projects">Projects</a>
                 <a href="#beyond-code" class="mobile-only-nav">Beyond Code</a>
+                <a href="javascript:void(0)" class="mobile-only-nav nav-terminal-link" data-terminal-launch>
+                    <span class="nav-terminal-text">Terminal mode</span>
+                </a>
                 <a href="#contact">Contact Me</a>
             </nav>
             <div class="nav-actions">
@@ -1026,12 +1029,32 @@
         </div>
     </section>
 
+    <!-- Terminal Mode (Easter Egg) -->
+    <button type="button" class="terminal-peek" data-terminal-launch aria-label="Open terminal mode" title="Ctrl + Shift + T">
+        &gt;_ Terminal
+    </button>
+
+    <div class="terminal-overlay" data-terminal hidden>
+        <div class="terminal-shell" role="dialog" aria-label="Terminal mode">
+            <div class="terminal-bar">
+                <span class="terminal-title">srinivasa.dev.terminal</span>
+                <button type="button" class="terminal-close" aria-label="Close terminal">Close</button>
+            </div>
+            <div class="terminal-screen" role="log"></div>
+            <div class="terminal-input-row">
+                <span class="terminal-prompt">visitor@srinivasa:~$</span>
+                <input type="text" class="terminal-input" name="terminal-input" aria-label="Terminal input" spellcheck="false" autocomplete="off" placeholder="type 'help'" maxlength="120">
+            </div>
+        </div>
+    </div>
+
     <button type="button" class="scroll-top" aria-label="Scroll to top" hidden>
         <i class="fas fa-arrow-up"></i>
     </button>
 
     <!-- Scripts -->
     <script src="/assets/js/sn.js?v=20260321" onerror="window.__appBoot?.markFailed('We could not load the page properly. Please refresh and try again.')"></script>
+    <script src="/assets/js/terminal.js?v=20260321"></script>
     <script type="module" src="/assets/js/firebase.js?v=20260321"></script>
     <script type="module">
         import { CLARITY_KEY } from '/assets/js/apikeys.js?v=20260321';

@@ -40,6 +40,17 @@ body {
     cursor: default;
 }
 
+body.terminal-mode-open {
+    overflow: hidden;
+}
+
+body.terminal-mode-open .navbar,
+body.terminal-mode-open .terminal-peek,
+body.terminal-mode-open .scroll-top {
+    opacity: 0;
+    pointer-events: none;
+}
+
 a {
     text-decoration: none;
     color: inherit;
@@ -1239,6 +1250,238 @@ img {
     white-space: nowrap;
 }
 
+/* Assistive utility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* Terminal Mode */
+.terminal-peek {
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid #1f2937;
+    background: linear-gradient(120deg, #0f172a, #0b1323);
+    color: #e5e7eb;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    z-index: 240;
+    pointer-events: auto;
+    opacity: 0.85;
+    transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.terminal-peek:hover {
+    transform: translateY(-2px);
+    opacity: 1;
+}
+
+.terminal-overlay {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(99, 102, 241, 0.08), transparent 24%),
+        linear-gradient(180deg, rgba(2, 6, 23, 0.96), rgba(3, 7, 18, 0.985));
+    backdrop-filter: blur(4px);
+    z-index: 210;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.terminal-overlay[hidden] {
+    display: none !important;
+}
+
+.terminal-shell {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0)),
+        #050816;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    color: #E5E7EB;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.terminal-shell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 28px, 28px 100%;
+    pointer-events: none;
+    opacity: 0.2;
+}
+
+.terminal-bar {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 1.5rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    background: linear-gradient(180deg, rgba(2, 6, 23, 0.96), rgba(5, 8, 22, 0.92));
+}
+
+.terminal-screen {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    overflow: auto;
+    padding: 1.4rem 1.5rem 1.4rem;
+    font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    background:
+        linear-gradient(180deg, rgba(14, 116, 144, 0.05), transparent 28%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0));
+    line-height: 1.65;
+}
+
+.terminal-line {
+    margin-bottom: 0.45rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.terminal-help-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0.55rem 0 0.9rem;
+}
+
+.terminal-help-column {
+    padding: 0.9rem 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.38);
+}
+
+.terminal-help-heading {
+    margin-bottom: 0.65rem;
+    color: #8be9fd;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.terminal-help-item {
+    margin-bottom: 0.35rem;
+    color: #e5e7eb;
+    line-height: 1.55;
+}
+
+.terminal-help-item:last-child {
+    margin-bottom: 0;
+}
+
+.terminal-help-item a {
+    color: #8be9fd;
+    text-decoration: underline;
+}
+
+.terminal-line a {
+    color: #8be9fd;
+    text-decoration: underline;
+    word-break: break-all;
+}
+
+.terminal-line .prompt { color: #8be9fd; }
+.terminal-line .cmd { color: #a5b4fc; }
+.terminal-line .output { color: #E5E7EB; }
+.terminal-line .terminal-hint-command {
+    color: #8be9fd;
+    font-style: italic;
+}
+.terminal-line .terminal-hint-separator { color: rgba(226, 232, 240, 0.45); }
+
+.terminal-input-row {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.95rem 1.5rem calc(1rem + env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(148, 163, 184, 0.12);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(9, 14, 28, 0.98));
+}
+
+.terminal-title {
+    font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-size: 0.84rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #93c5fd;
+    text-transform: lowercase;
+}
+
+.terminal-close {
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.78);
+    color: #e2e8f0;
+    border-radius: 999px;
+    padding: 0.45rem 0.85rem;
+    font: inherit;
+    font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-size: 0.8rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.terminal-prompt {
+    font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    color: #10B981;
+    font-weight: 700;
+}
+
+.terminal-input {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    color: #E5E7EB;
+    font: inherit;
+    font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+.terminal-input::placeholder {
+    color: #64748b;
+}
+
+.terminal-input:focus {
+    outline: none;
+}
+
+@keyframes ai-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.35); }
+    70% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .nav-container {
@@ -1266,7 +1509,7 @@ img {
         right: auto;
         width: 100vw;
         max-width: 100vw;
-        gap: 0.35rem;
+        gap: 0.12rem;
         padding: 0.75rem 1rem 1rem;
         background: #FFFFFF;
         border-top: 1px solid #ECE7DE;
@@ -1310,6 +1553,33 @@ img {
 
     .mobile-only-nav {
         display: inline-flex;
+    }
+
+    .nav-links a.nav-terminal-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0;
+        padding: 0.95rem 0.25rem;
+        margin: 0;
+        border: none;
+        border-bottom: 1px solid #F0EBE3;
+        background: transparent;
+        box-shadow: none;
+        color: #1e3a8a !important;
+        width: 100%;
+        text-align: left;
+        white-space: nowrap;
+        font-weight: 700;
+        font-size: 1.02rem;
+        letter-spacing: 0.01em;
+    }
+
+    .nav-links a.nav-terminal-link .nav-terminal-text {
+        font-weight: 700;
+        font-size: 1.02rem;
+        color: #1e3a8a !important;
+        font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+        letter-spacing: 0.02em;
     }
 
     .hero-content-wrapper,
@@ -1502,6 +1772,10 @@ img {
         max-width: 320px;
     }
 
+    .terminal-peek {
+        display: none;
+    }
+
     .scroll-top {
         right: 1rem;
         bottom: 1rem;
@@ -1509,7 +1783,42 @@ img {
         height: 3rem;
     }
 
-    .email-link {
-        font-size: 1.5rem;
+.email-link {
+    font-size: 1.5rem;
+}
+}
+
+@media (max-width: 640px) {
+    .terminal-overlay {
+        padding: 0;
+    }
+
+    .terminal-shell {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .terminal-screen {
+        padding: 1rem 0.9rem 1.2rem;
+        font-size: 0.92rem;
+    }
+
+    .terminal-help-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .terminal-bar {
+        padding: 0.8rem 0.9rem;
+    }
+
+    .terminal-input-row {
+        grid-template-columns: auto 1fr;
+        gap: 0.55rem;
+        padding: 0.85rem 0.9rem calc(0.85rem + env(safe-area-inset-bottom));
+    }
+
+    .terminal-input {
+        font-size: 0.92rem;
     }
 }

@@ -106,10 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', () => {
         if (navbar && window.scrollY > lastScrollY && window.scrollY > 100) {
-            // Scrolling down and past the top
             navbar.classList.add('nav-hidden');
         } else if (navbar) {
-            // Scrolling up or at the top
             navbar.classList.remove('nav-hidden');
         }
 
@@ -279,9 +277,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (projectsList && projectsToggle) {
         const visibleProjectCards = Array.from(projectsList.querySelectorAll('.project-row'));
-        const initialVisibleCount = window.matchMedia('(max-width: 1024px)').matches
-            ? Number(projectsList.dataset.projectLimitMobile || 4)
-            : Number(projectsList.dataset.projectLimitDesktop || 6);
+        const mobileLimit = Number(projectsList.dataset.projectLimitMobile || 4);
+        const desktopLimit = Number(projectsList.dataset.projectLimitDesktop || 6);
+        const isMobile = window.matchMedia('(max-width: 900px)').matches;
+        const initialVisibleCount = isMobile ? mobileLimit : desktopLimit;
         const shouldCollapse = visibleProjectCards.length > initialVisibleCount;
 
         if (shouldCollapse) {
