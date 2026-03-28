@@ -1,14 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
     const terminalOverlay = document.querySelector('[data-terminal]');
     const terminalLaunchers = document.querySelectorAll('[data-terminal-launch]');
+    const terminalShell = terminalOverlay?.querySelector('.terminal-shell');
     const terminalInput = terminalOverlay?.querySelector('.terminal-input');
     const terminalScreen = terminalOverlay?.querySelector('.terminal-screen');
     const terminalClose = terminalOverlay?.querySelector('.terminal-close');
+    const syncTerminalViewportHeight = () => {
+        const viewport = window.visualViewport;
+        const viewportHeight = viewport?.height || window.innerHeight;
+        const offsetTop = viewport?.offsetTop || 0;
+
+        document.documentElement.style.setProperty('--terminal-vh', `${viewportHeight}px`);
+        document.documentElement.style.setProperty('--terminal-offset-top', `${offsetTop}px`);
+    };
 
     const terminalHistory = [];
     let terminalHistoryIndex = -1;
     let terminalBooted = false;
     let activeMiniGame = null;
+    let pendingTerminalPrompt = null;
+    let lockedScrollY = 0;
+    let pendingThemePrompt = false;
+    const availableThemes = ['default', 'matrix', 'amber'];
 
     const linkify = (text = '') => {
         if (!text) return '';
@@ -66,7 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'help — list commands',
             'ip — get your public IP (network fetch)',
             'ping — live HTTP latency check',
-            'weather — weather near your IP location',
+            'weather — ask for a city and fetch weather',
+            'theme — switch terminal theme',
             'advice — random advice from the internet',
             'fact — random useless fact',
             'game — start a tiny terminal game',
@@ -130,8 +144,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const printTerminalIntro = () => {
         if (terminalBooted) return;
         addTerminalLine('srinivasa.dev terminal session initialized');
+        addTerminalLine(terminalMotdLines[Math.floor(Math.random() * terminalMotdLines.length)]);
         addTerminalLine("type 'help' to inspect available commands");
         terminalBooted = true;
+    };
+
+    const applyTerminalTheme = (themeName) => {
+        if (!terminalShell) return false;
+        const normalizedTheme = availableThemes.includes(themeName) ? themeName : 'default';
+
+        terminalShell.dataset.theme = normalizedTheme;
+        try {
+            window.localStorage.setItem('terminal-theme', normalizedTheme);
+        } catch (error) {
+            // Ignore storage failures.
+        }
+
+        return true;
+    };
+
+    const restoreTerminalTheme = () => {
+        try {
+            const savedTheme = window.localStorage.getItem('terminal-theme');
+            if (savedTheme) {
+                applyTerminalTheme(savedTheme);
+                return;
+            }
+        } catch (error) {
+            // Ignore storage failures.
+        }
+
+        applyTerminalTheme('default');
     };
 
     const formatTimeString = () => new Intl.DateTimeFormat(undefined, {
@@ -173,14 +216,78 @@ document.addEventListener('DOMContentLoaded', () => {
         'Fortune says: the spec was not wrong, just creatively interpreted.',
         'Fortune says: today is a good day to rename something dangerous.',
     ];
+    const terminalMotdLines = [
+        'build status: clean, caffeinated, deployable',
+        'terminal online. bugs currently pretending to behave.',
+        'today feels like a good day to ship without drama.',
+        'systems nominal. ambition slightly above baseline.',
+        'all green. suspicious, but welcome.',
+        'runtime stable. ideas unstable in a useful way.',
+    ];
     const getPublicIp = async () => {
         if (cachedIp) return cachedIp;
-        const response = await fetchWithTimeout('https://api64.ipify.org?format=json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('ip lookup failed');
-        const data = await response.json();
-        cachedIp = data?.ip || null;
-        if (!cachedIp) throw new Error('ip unavailable');
-        return cachedIp;
+
+        const providers = [
+            async () => {
+                const response = await fetchWithTimeout('https://api64.ipify.org?format=json', { cache: 'no-store' });
+                if (!response.ok) throw new Error('ipify failed');
+                const data = await response.json();
+                return data?.ip || null;
+            },
+            async () => {
+                const response = await fetchWithTimeout('https://api.ipify.org?format=json', { cache: 'no-store' });
+                if (!response.ok) throw new Error('ipify fallback failed');
+                const data = await response.json();
+                return data?.ip || null;
+            },
+            async () => {
+                const response = await fetchWithTimeout('https://ipapi.co/ip/', {
+                    cache: 'no-store',
+                    headers: {
+                        Accept: 'text/plain',
+                    },
+                });
+                if (!response.ok) throw new Error('ipapi failed');
+                const text = (await response.text()).trim();
+                return text || null;
+            },
+        ];
+
+        for (const provider of providers) {
+            try {
+                const ip = await provider();
+                if (ip) {
+                    cachedIp = ip;
+                    return cachedIp;
+                }
+            } catch (error) {
+                // Try the next provider.
+            }
+        }
+
+        throw new Error('ip unavailable');
+    };
+
+    const getIpv4AndIpv6 = async () => {
+        const [ipv4, ipv6] = await Promise.allSettled([
+            fetchWithTimeout('https://api.ipify.org?format=json', { cache: 'no-store' })
+                .then((response) => {
+                    if (!response.ok) throw new Error('ipv4 failed');
+                    return response.json();
+                })
+                .then((data) => data?.ip || null),
+            fetchWithTimeout('https://api64.ipify.org?format=json', { cache: 'no-store' })
+                .then((response) => {
+                    if (!response.ok) throw new Error('ipv6 failed');
+                    return response.json();
+                })
+                .then((data) => data?.ip || null),
+        ]);
+
+        return {
+            ipv4: ipv4.status === 'fulfilled' ? ipv4.value : null,
+            ipv6: ipv6.status === 'fulfilled' ? ipv6.value : null,
+        };
     };
 
     const startGuessGame = () => {
@@ -231,33 +338,154 @@ document.addEventListener('DOMContentLoaded', () => {
         return [distance <= 3 ? 'Too high, but very close.' : distance <= 8 ? 'Too high. Getting warmer.' : 'Too high.'];
     };
 
+    const startWeatherCityPrompt = () => {
+        pendingTerminalPrompt = { type: 'weather-city' };
+        return [
+            'Enter a city name for weather lookup.',
+            'Example: Bangalore'
+        ];
+    };
+
     const getIpLocation = async () => {
         if (cachedIpLocation) return cachedIpLocation;
+        const publicIp = await getPublicIp();
 
-        const response = await fetchWithTimeout('https://ipapi.co/json/', {
-            cache: 'no-store',
-            headers: {
-                Accept: 'application/json',
+        const providers = [
+            async () => {
+                const response = await fetchWithTimeout(`https://ipapi.co/${encodeURIComponent(publicIp)}/json/`, {
+                    cache: 'no-store',
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                }, 5000);
+                if (!response.ok) throw new Error('ipapi failed');
+                const data = await response.json();
+                return {
+                    source: 'ipapi',
+                    ip: data?.ip || publicIp,
+                    city: data?.city || '',
+                    region: data?.region || '',
+                    country_name: data?.country_name || '',
+                    country_code: data?.country_code || '',
+                    latitude: Number(data?.latitude),
+                    longitude: Number(data?.longitude),
+                };
             },
-        });
+            async () => {
+                const response = await fetchWithTimeout(`https://geolocation-db.com/json/${encodeURIComponent(publicIp)}`, {
+                    cache: 'no-store',
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                }, 5000);
+                if (!response.ok) throw new Error('geolocation-db failed');
+                const data = await response.json();
+                return {
+                    source: 'geolocation-db',
+                    ip: data?.IPv4 || publicIp,
+                    city: data?.city || '',
+                    region: data?.state || '',
+                    country_name: data?.country_name || '',
+                    country_code: data?.country_code || '',
+                    latitude: Number(data?.latitude),
+                    longitude: Number(data?.longitude),
+                };
+            },
+            async () => {
+                const response = await fetchWithTimeout(`https://ipwho.is/${encodeURIComponent(publicIp)}`, {
+                    cache: 'no-store',
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                }, 5000);
+                if (!response.ok) throw new Error('ipwho.is failed');
+                const data = await response.json();
+                if (data?.success === false) throw new Error('ipwho.is lookup failed');
+                return {
+                    source: 'ipwho.is',
+                    ip: data?.ip || publicIp,
+                    city: data?.city || '',
+                    region: data?.region || '',
+                    country_name: data?.country || '',
+                    country_code: data?.country_code || '',
+                    latitude: Number(data?.latitude),
+                    longitude: Number(data?.longitude),
+                };
+            },
+        ];
 
-        if (!response.ok) throw new Error('location lookup failed');
+        const results = (await Promise.allSettled(providers.map((provider) => provider())))
+            .filter((result) => result.status === 'fulfilled')
+            .map((result) => result.value)
+            .filter((result) => Number.isFinite(result.latitude) && Number.isFinite(result.longitude));
 
-        const data = await response.json();
-        if (typeof data?.latitude !== 'number' || typeof data?.longitude !== 'number') {
+        if (!results.length) {
             throw new Error('location unavailable');
         }
 
-        cachedIpLocation = data;
+        const normalize = (value) => String(value || '').trim().toLowerCase();
+        const scoredResults = results.map((candidate) => {
+            const score = results.reduce((total, other) => {
+                if (candidate === other) return total + 1;
+
+                let next = total;
+                if (normalize(candidate.country_code) && normalize(candidate.country_code) === normalize(other.country_code)) next += 3;
+                if (normalize(candidate.country_name) && normalize(candidate.country_name) === normalize(other.country_name)) next += 2;
+                if (normalize(candidate.region) && normalize(candidate.region) === normalize(other.region)) next += 3;
+                if (normalize(candidate.city) && normalize(candidate.city) === normalize(other.city)) next += 5;
+                return next;
+            }, 0);
+
+            return { ...candidate, score };
+        });
+
+        scoredResults.sort((a, b) => b.score - a.score);
+        cachedIpLocation = scoredResults[0];
         return cachedIpLocation;
     };
 
     const getWeatherSummary = async () => {
         const location = await getIpLocation();
-        const latitude = location.latitude;
-        const longitude = location.longitude;
         const cityBits = [location.city, location.region, location.country_name].filter(Boolean);
         const placeLabel = cityBits.join(', ') || 'your area';
+        let latitude = location.latitude;
+        let longitude = location.longitude;
+
+        if (location.city) {
+            try {
+                const geocodeUrl = new URL('https://geocoding-api.open-meteo.com/v1/search');
+                geocodeUrl.searchParams.set('name', location.city);
+                geocodeUrl.searchParams.set('count', '5');
+                geocodeUrl.searchParams.set('language', 'en');
+                geocodeUrl.searchParams.set('format', 'json');
+
+                const geocodeResponse = await fetchWithTimeout(geocodeUrl.toString(), {
+                    cache: 'no-store',
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                }, 5000);
+
+                if (geocodeResponse.ok) {
+                    const geocodeData = await geocodeResponse.json();
+                    const results = Array.isArray(geocodeData?.results) ? geocodeData.results : [];
+                    const matchedCity = results.find((result) => {
+                        const sameCountry = !location.country_code || result?.country_code === location.country_code;
+                        const sameRegion = !location.region || result?.admin1 === location.region;
+                        return sameCountry && sameRegion;
+                    }) || results.find((result) => (
+                        !location.country_code || result?.country_code === location.country_code
+                    )) || results[0];
+
+                    if (typeof matchedCity?.latitude === 'number' && typeof matchedCity?.longitude === 'number') {
+                        latitude = matchedCity.latitude;
+                        longitude = matchedCity.longitude;
+                    }
+                }
+            } catch (error) {
+                // Fall back to raw IP coordinates if city geocoding fails.
+            }
+        }
 
         const url = new URL('https://api.open-meteo.com/v1/forecast');
         url.searchParams.set('latitude', String(latitude));
@@ -304,6 +532,90 @@ document.addEventListener('DOMContentLoaded', () => {
         const temperature = Math.round(current.temperature_2m);
         const feelsLike = Math.round(current.apparent_temperature);
         const wind = Math.round(current.wind_speed_10m);
+
+        return [
+            `Current weather for ${placeLabel}: ${condition}, ${temperature}°C.`,
+            `Feels like ${feelsLike}°C with wind around ${wind} km/h.`
+        ];
+    };
+
+    const getWeatherSummaryForCity = async (cityQuery) => {
+        const location = await getIpLocation();
+        const geocodeUrl = new URL('https://geocoding-api.open-meteo.com/v1/search');
+        geocodeUrl.searchParams.set('name', cityQuery);
+        geocodeUrl.searchParams.set('count', '8');
+        geocodeUrl.searchParams.set('language', 'en');
+        geocodeUrl.searchParams.set('format', 'json');
+
+        if (location?.country_code) {
+            geocodeUrl.searchParams.set('countryCode', location.country_code);
+        }
+
+        const geocodeResponse = await fetchWithTimeout(geocodeUrl.toString(), {
+            cache: 'no-store',
+            headers: {
+                Accept: 'application/json',
+            },
+        }, 5000);
+
+        if (!geocodeResponse.ok) throw new Error('city geocoding failed');
+
+        const geocodeData = await geocodeResponse.json();
+        const results = Array.isArray(geocodeData?.results) ? geocodeData.results : [];
+        const matchedCity = results.find((result) => (
+            typeof result?.latitude === 'number' && typeof result?.longitude === 'number'
+        ));
+
+        if (!matchedCity) {
+            throw new Error('city not found');
+        }
+
+        const url = new URL('https://api.open-meteo.com/v1/forecast');
+        url.searchParams.set('latitude', String(matchedCity.latitude));
+        url.searchParams.set('longitude', String(matchedCity.longitude));
+        url.searchParams.set('current', 'temperature_2m,apparent_temperature,weather_code,wind_speed_10m');
+        url.searchParams.set('timezone', 'auto');
+
+        const response = await fetchWithTimeout(url.toString(), {
+            cache: 'no-store',
+            headers: {
+                Accept: 'application/json',
+            },
+        }, 5000);
+
+        if (!response.ok) throw new Error('weather lookup failed');
+
+        const data = await response.json();
+        const current = data?.current;
+        if (!current) throw new Error('weather unavailable');
+
+        const weatherCodeMap = {
+            0: 'clear sky',
+            1: 'mainly clear',
+            2: 'partly cloudy',
+            3: 'overcast',
+            45: 'foggy',
+            48: 'depositing rime fog',
+            51: 'light drizzle',
+            53: 'moderate drizzle',
+            55: 'dense drizzle',
+            61: 'slight rain',
+            63: 'moderate rain',
+            65: 'heavy rain',
+            71: 'slight snow',
+            73: 'moderate snow',
+            75: 'heavy snow',
+            80: 'rain showers',
+            81: 'strong rain showers',
+            82: 'violent rain showers',
+            95: 'thunderstorm',
+        };
+
+        const condition = weatherCodeMap[current.weather_code] || 'mixed weather';
+        const temperature = Math.round(current.temperature_2m);
+        const feelsLike = Math.round(current.apparent_temperature);
+        const wind = Math.round(current.wind_speed_10m);
+        const placeLabel = [matchedCity.name, matchedCity.admin1, matchedCity.country].filter(Boolean).join(', ');
 
         return [
             `Current weather for ${placeLabel}: ${condition}, ${temperature}°C.`,
@@ -433,8 +745,14 @@ document.addEventListener('DOMContentLoaded', () => {
         ],
         ip: async () => {
             try {
-                const ip = await getPublicIp();
-                return [`Public IP (via ipify): ${ip}`];
+                const primaryIp = await getPublicIp();
+                const { ipv4, ipv6 } = await getIpv4AndIpv6();
+
+                return [
+                    `Public IP: ${primaryIp}`,
+                    `IPv4: ${ipv4 || 'unavailable'}`,
+                    `IPv6: ${ipv6 || 'unavailable'}`
+                ];
             } catch (error) {
                 return ['Could not fetch IP right now. Check network and try again (timeout ~3.5s).'];
             }
@@ -451,11 +769,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
         weather: async () => {
-            try {
-                return await getWeatherSummary();
-            } catch (error) {
-                return ['Could not fetch weather for your IP location right now. Try again in a bit.'];
-            }
+            return startWeatherCityPrompt();
+        },
+        theme: () => {
+            pendingThemePrompt = true;
+            return [
+                'Choose a theme: default, matrix, amber',
+                'Type the theme name.'
+            ];
         },
         advice: async () => {
             try {
@@ -574,6 +895,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        if (pendingTerminalPrompt?.type === 'weather-city' && normalized !== 'help') {
+            const cityQuery = command.trim();
+            pendingTerminalPrompt = null;
+            if (!cityQuery) {
+                addTerminalLine('City name was empty. Run `weather` again.', { output: 'City name was empty. Run `weather` again.' });
+                return;
+            }
+
+            getWeatherSummaryForCity(cityQuery)
+                .then((lines) => lines.forEach((line) => addTerminalLine(line, { output: line })))
+                .catch(() => addTerminalLine(`Could not fetch weather for ${cityQuery}.`, { output: `Could not fetch weather for ${cityQuery}.` }));
+            return;
+        }
+
+        if (pendingThemePrompt && normalized !== 'help') {
+            pendingThemePrompt = false;
+            if (!availableThemes.includes(normalized)) {
+                addTerminalLine('Unknown theme. Choose: default, matrix, amber.', { output: 'Unknown theme. Choose: default, matrix, amber.' });
+                return;
+            }
+
+            applyTerminalTheme(normalized);
+            addTerminalLine(`Theme changed to ${normalized}.`, { output: `Theme changed to ${normalized}.` });
+            return;
+        }
+
         if (normalized === 'clear') {
             terminalScreen.innerHTML = '';
             return;
@@ -613,6 +960,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const openTerminal = () => {
         if (!terminalOverlay) return;
+        syncTerminalViewportHeight();
+        lockedScrollY = window.scrollY || window.pageYOffset || 0;
+        document.body.style.top = `-${lockedScrollY}px`;
         terminalOverlay.hidden = false;
         terminalOverlay.removeAttribute('hidden');
         document.body.classList.add('terminal-mode-open');
@@ -625,6 +975,8 @@ document.addEventListener('DOMContentLoaded', () => {
         terminalOverlay.hidden = true;
         terminalOverlay.setAttribute('hidden', 'true');
         document.body.classList.remove('terminal-mode-open');
+        document.body.style.top = '';
+        window.scrollTo(0, lockedScrollY);
         terminalHistoryIndex = -1;
     };
 
@@ -636,6 +988,11 @@ document.addEventListener('DOMContentLoaded', () => {
             closeTerminal();
         }
     });
+
+    restoreTerminalTheme();
+    syncTerminalViewportHeight();
+    window.addEventListener('resize', syncTerminalViewportHeight);
+    window.visualViewport?.addEventListener('resize', syncTerminalViewportHeight);
 
     terminalInput?.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
