@@ -486,10 +486,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 observer.observe(slot, { childList: true, subtree: true });
 
                 widgets.widgets.createTweet(post.id, slot, {
-                    cards: 'hidden',
-                    conversation: 'none',
-                    dnt: true,
-                    theme: 'light'
+                    // cards: 'hidden', // uncomment if you want to hide media cards in the embedded tweet
+                    conversation: 'all', // hide the conversation thread below the tweet; change to 'all' to show the conversation or 'none' to hide it
+                    dnt: true, // enable Do Not Track to prevent tracking by X
+                    theme: 'light' // set the theme to light; change to 'dark' for dark mode
                 }).catch(() => {
                     if (settled) return;
                     settled = true;

@@ -4,51 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>X Posts Admin</title>
+    <!-- Twitter Widgets JS for previews -->
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fafafa; color: #111; max-width: 800px; margin: 40px auto; padding: 20px; }
-        h1 { font-size: 24px; margin-bottom: 20px; }
-        .input-group { margin-bottom: 20px; display: flex; gap: 10px; }
-        input[type="password"], input[type="text"] { padding: 10px; border: 1px solid #ccc; border-radius: 6px; flex-grow: 1; font-size: 16px; }
-        button { padding: 10px 20px; background: #111; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        h1 { font-size: 24px; margin-bottom: 20px; text-align: center; }
+        .input-group { margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+        input[type="password"], input[type="text"] { padding: 12px; border: 1px solid #ccc; border-radius: 8px; flex-grow: 1; font-size: 16px; min-width: 200px; }
+        button { padding: 12px 20px; background: #111; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background 0.2s; white-space: nowrap; }
         button:hover { background: #333; }
         .list-container { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .post-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+        .post-item { padding: 20px 0; border-bottom: 1px solid #eee; display: flex; flex-direction: column; gap: 15px; }
         .post-item:last-child { border-bottom: none; }
-        .post-url { flex-grow: 1; word-break: break-all; font-family: monospace; font-size: 14px; }
-        .btn-danger { background: #dc3545; padding: 6px 12px; font-size: 14px; }
+        .post-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .post-url { flex-grow: 1; font-family: monospace; font-size: 14px; min-width: 250px; }
+        .btn-group { display: flex; gap: 5px; }
+        .btn-icon { padding: 12px 15px; background: #e0e0e0; color: #111; }
+        .btn-icon:hover { background: #d0d0d0; }
+        .btn-danger { background: #dc3545; }
         .btn-danger:hover { background: #c82333; }
-        #status { margin-top: 15px; font-weight: bold; }
+        .preview-container { background: #f9f9f9; border-radius: 12px; padding: 15px; display: flex; justify-content: center; min-height: 100px; overflow-x: auto; }
+        #status { margin-top: 15px; font-weight: bold; text-align: center; min-height: 24px; }
         .error { color: #dc3545; }
         .success { color: #28a745; }
-        .add-section { background: #f0f0f0; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .add-section { background: #fff; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        @media (max-width: 600px) {
+            body { margin: 10px auto; }
+            .btn-group { flex-grow: 1; display: flex; }
+            .btn-group button { flex-grow: 1; }
+            .post-controls { flex-direction: column; align-items: stretch; }
+        }
     </style>
 </head>
 <body>
 
-    <h1>X Posts Admin Dashboard</h1>
+    <h1>X Posts Admin</h1>
     
     <div class="input-group">
         <input type="password" id="secretKey" placeholder="Enter Secret Key" />
-        <button onclick="fetchPosts()">Load Posts</button>
+        <button onclick="fetchPosts()" style="flex-grow: 1;">Load Posts</button>
     </div>
 
     <div id="status"></div>
 
     <div id="adminContent" style="display: none;">
         <div class="add-section">
-            <h3>Add New Post</h3>
+            <h3 style="margin-top: 0;">Add New Post</h3>
             <div class="input-group" style="margin-bottom: 0;">
                 <input type="text" id="newUrl" placeholder="https://x.com/username/status/..." />
-                <button onclick="addPost()">Add Post</button>
+                <button onclick="addPost()">Add to Top</button>
             </div>
         </div>
 
-        <div class="list-container" id="postsList">
-            <!-- Posts will be listed here -->
+        <div class="list-container">
+            <h3 style="margin-top: 0; margin-bottom: 15px;">Manage Posts</h3>
+            <div id="postsList">
+                <!-- Posts will be listed here -->
+            </div>
         </div>
         
-        <div style="margin-top: 20px; text-align: right;">
-            <button onclick="saveAllChanges()" style="background: #28a745;">Save Reordered/Replaced List</button>
+        <div style="margin-top: 20px; text-align: center; position: sticky; bottom: 20px;">
+            <button onclick="saveAllChanges()" style="background: #28a745; padding: 15px 30px; box-shadow: 0 4px 12px rgba(40,167,69,0.3); width: 100%; max-width: 400px;">Save All Changes to Live Site</button>
         </div>
     </div>
 
@@ -67,9 +84,8 @@
             if (!secret) return setStatus('Please enter the secret key', true);
             
             try {
-                // Fetch to check auth (actually our GET is public, but let's test if we can get them)
                 const res = await fetch('/api/x-posts');
-                if (!res.ok) throw new Error('Failed to fetch');
+                if (!res.ok) throw new Error('Failed to fetch from API');
                 currentPosts = await res.json();
                 renderPosts();
                 document.getElementById('adminContent').style.display = 'block';
@@ -83,25 +99,58 @@
             const list = document.getElementById('postsList');
             list.innerHTML = '';
             if (currentPosts.length === 0) {
-                list.innerHTML = '<p>No posts found.</p>';
+                list.innerHTML = '<p style="text-align: center; color: #666;">No posts found.</p>';
                 return;
             }
             currentPosts.forEach((url, index) => {
                 const div = document.createElement('div');
                 div.className = 'post-item';
                 div.innerHTML = `
-                    <input type="text" value="${url}" class="post-url" onchange="updateUrl(${index}, this.value)" />
-                    <button class="btn-danger" onclick="removePost(${index})">Remove</button>
+                    <div class="post-controls">
+                        <input type="text" value="${url}" class="post-url" onchange="updateUrl(${index}, this.value)" />
+                        <div class="btn-group">
+                            <button class="btn-icon" onclick="moveUp(${index})" title="Move Up" ${index === 0 ? 'disabled style="opacity: 0.5;"' : ''}>↑</button>
+                            <button class="btn-icon" onclick="moveDown(${index})" title="Move Down" ${index === currentPosts.length - 1 ? 'disabled style="opacity: 0.5;"' : ''}>↓</button>
+                            <button class="btn-danger" onclick="removePost(${index})">Delete</button>
+                        </div>
+                    </div>
+                    <div class="preview-container">
+                        <blockquote class="twitter-tweet" data-dnt="true" data-theme="light">
+                            <a href="${url}">Loading preview...</a>
+                        </blockquote>
+                    </div>
                 `;
                 list.appendChild(div);
             });
+
+            // Trigger Twitter widgets to render the new blockquotes
+            if (window.twttr && window.twttr.widgets) {
+                window.twttr.widgets.load(document.getElementById('postsList'));
+            }
         }
 
         function updateUrl(index, newUrl) {
             currentPosts[index] = newUrl;
+            renderPosts(); // Re-render to show new preview
         }
 
-        async function addPost() {
+        function moveUp(index) {
+            if (index === 0) return;
+            const temp = currentPosts[index - 1];
+            currentPosts[index - 1] = currentPosts[index];
+            currentPosts[index] = temp;
+            renderPosts();
+        }
+
+        function moveDown(index) {
+            if (index === currentPosts.length - 1) return;
+            const temp = currentPosts[index + 1];
+            currentPosts[index + 1] = currentPosts[index];
+            currentPosts[index] = temp;
+            renderPosts();
+        }
+
+        function addPost() {
             const urlInput = document.getElementById('newUrl');
             const url = urlInput.value.trim();
             if (!url) return;
@@ -109,19 +158,19 @@
             currentPosts.unshift(url);
             renderPosts();
             urlInput.value = '';
-            await saveAllChanges();
         }
 
-        async function removePost(index) {
+        function removePost(index) {
             if (confirm('Are you sure you want to remove this post?')) {
                 currentPosts.splice(index, 1);
                 renderPosts();
-                await saveAllChanges();
             }
         }
 
         async function saveAllChanges() {
             const secret = document.getElementById('secretKey').value;
+            if (!secret) return setStatus('Secret key required to save', true);
+
             try {
                 const res = await fetch('/api/x-posts', {
                     method: 'PUT',
@@ -132,11 +181,11 @@
                     body: JSON.stringify({ posts: currentPosts })
                 });
                 
-                if (!res.ok) throw new Error('Unauthorized or failed to save');
+                if (!res.ok) throw new Error('Unauthorized or failed to save. Check your secret key.');
                 const data = await res.json();
                 currentPosts = data.posts;
                 renderPosts();
-                setStatus('Changes saved successfully!');
+                setStatus('Changes saved successfully to live site!');
             } catch (e) {
                 setStatus(e.message, true);
             }
