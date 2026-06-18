@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X Posts Admin</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fafafa; color: #111; max-width: 800px; margin: 40px auto; padding: 20px; }
+        h1 { font-size: 24px; margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; display: flex; gap: 10px; }
+        input[type="password"], input[type="text"] { padding: 10px; border: 1px solid #ccc; border-radius: 6px; flex-grow: 1; font-size: 16px; }
+        button { padding: 10px 20px; background: #111; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        button:hover { background: #333; }
+        .list-container { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .post-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+        .post-item:last-child { border-bottom: none; }
+        .post-url { flex-grow: 1; word-break: break-all; font-family: monospace; font-size: 14px; }
+        .btn-danger { background: #dc3545; padding: 6px 12px; font-size: 14px; }
+        .btn-danger:hover { background: #c82333; }
+        #status { margin-top: 15px; font-weight: bold; }
+        .error { color: #dc3545; }
+        .success { color: #28a745; }
+        .add-section { background: #f0f0f0; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>X Posts Admin Dashboard</h1>
+    
+    <div class="input-group">
+        <input type="password" id="secretKey" placeholder="Enter Secret Key" />
+        <button onclick="fetchPosts()">Load Posts</button>
+    </div>
+
+    <div id="status"></div>
+
+    <div id="adminContent" style="display: none;">
+        <div class="add-section">
+            <h3>Add New Post</h3>
+            <div class="input-group" style="margin-bottom: 0;">
+                <input type="text" id="newUrl" placeholder="https://x.com/username/status/..." />
+                <button onclick="addPost()">Add Post</button>
+            </div>
+        </div>
+
+        <div class="list-container" id="postsList">
+            <!-- Posts will be listed here -->
+        </div>
+        
+        <div style="margin-top: 20px; text-align: right;">
+            <button onclick="saveAllChanges()" style="background: #28a745;">Save Reordered/Replaced List</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPosts = [];
+
+        function setStatus(msg, isError = false) {
+            const el = document.getElementById('status');
+            el.textContent = msg;
+            el.className = isError ? 'error' : 'success';
+            setTimeout(() => { el.textContent = ''; }, 4000);
+        }
+
+        async function fetchPosts() {
+            const secret = document.getElementById('secretKey').value;
+            if (!secret) return setStatus('Please enter the secret key', true);
+            
+            try {
+                // Fetch to check auth (actually our GET is public, but let's test if we can get them)
+                const res = await fetch('/api/x-posts');
+                if (!res.ok) throw new Error('Failed to fetch');
+                currentPosts = await res.json();
+                renderPosts();
+                document.getElementById('adminContent').style.display = 'block';
+                setStatus('Posts loaded successfully');
+            } catch (e) {
+                setStatus(e.message, true);
+            }
+        }
+
+        function renderPosts() {
+            const list = document.getElementById('postsList');
+            list.innerHTML = '';
+            if (currentPosts.length === 0) {
+                list.innerHTML = '<p>No posts found.</p>';
+                return;
+            }
+            currentPosts.forEach((url, index) => {
+                const div = document.createElement('div');
+                div.className = 'post-item';
+                div.innerHTML = `
+                    <input type="text" value="${url}" class="post-url" onchange="updateUrl(${index}, this.value)" />
+                    <button class="btn-danger" onclick="removePost(${index})">Remove</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function updateUrl(index, newUrl) {
+            currentPosts[index] = newUrl;
+        }
+
+        async function addPost() {
+            const urlInput = document.getElementById('newUrl');
+            const url = urlInput.value.trim();
+            if (!url) return;
+            
+            currentPosts.unshift(url);
+            renderPosts();
+            urlInput.value = '';
+            await saveAllChanges();
+        }
+
+        async function removePost(index) {
+            if (confirm('Are you sure you want to remove this post?')) {
+                currentPosts.splice(index, 1);
+                renderPosts();
+                await saveAllChanges();
+            }
+        }
+
+        async function saveAllChanges() {
+            const secret = document.getElementById('secretKey').value;
+            try {
+                const res = await fetch('/api/x-posts', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${secret}`
+                    },
+                    body: JSON.stringify({ posts: currentPosts })
+                });
+                
+                if (!res.ok) throw new Error('Unauthorized or failed to save');
+                const data = await res.json();
+                currentPosts = data.posts;
+                renderPosts();
+                setStatus('Changes saved successfully!');
+            } catch (e) {
+                setStatus(e.message, true);
+            }
+        }
+    </script>
+</body>
+</html>

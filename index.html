@@ -269,46 +269,6 @@
             margin-left: auto;
         }
 
-        .geo-faq {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .geo-faq-intro {
-            margin: 0 auto 32px;
-            max-width: 760px;
-            color: #303030;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            text-align: center;
-        }
-
-        .geo-faq-list {
-            display: grid;
-            gap: 20px;
-        }
-
-        .geo-faq-item {
-            padding-bottom: 20px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .geo-faq-item h3,
-        .geo-faq-item p {
-            margin: 0;
-        }
-
-        .geo-faq-item h3 {
-            color: #111111;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-
-        .geo-faq-item p {
-            color: #303030;
-            line-height: 1.7;
-        }
-
         @media (max-width: 900px) {
             .nav-container {
                 display: flex;
@@ -496,44 +456,6 @@
                     "isPartOf": {
                         "@id": "https://srinivasa.dev/#website"
                     }
-                },
-                {
-                    "@type": "FAQPage",
-                    "@id": "https://srinivasa.dev/#faq",
-                    "mainEntity": [
-                        {
-                            "@type": "Question",
-                            "name": "Who is Srinivasa Yadav?",
-                            "acceptedAnswer": {
-                                "@type": "Answer",
-                                "text": "Srinivasa Yadav, also known as Srinivasa, is a Flutter developer in Bengaluru, Karnataka, India with 5+ years of experience building mobile and web applications."
-                            }
-                        },
-                        {
-                            "@type": "Question",
-                            "name": "Is Srinivasa Yadav a Flutter developer?",
-                            "acceptedAnswer": {
-                                "@type": "Answer",
-                                "text": "Yes. Srinivasa Yadav is a Flutter developer specializing in Flutter, Dart, Firebase, REST APIs, TypeScript, Node.js, and cross-platform mobile app development."
-                            }
-                        },
-                        {
-                            "@type": "Question",
-                            "name": "Where is Srinivasa Yadav based?",
-                            "acceptedAnswer": {
-                                "@type": "Answer",
-                                "text": "Srinivasa Yadav is based in Bengaluru, Karnataka, India."
-                            }
-                        },
-                        {
-                            "@type": "Question",
-                            "name": "What does Srinivasa Yadav build?",
-                            "acceptedAnswer": {
-                                "@type": "Answer",
-                                "text": "Srinivasa Yadav builds scalable Flutter mobile applications, web experiences, Firebase integrations, REST API integrations, serverless APIs, and Dart packages such as wheel_slider."
-                            }
-                        }
-                    ]
                 }
             ]
         }
@@ -618,7 +540,7 @@
     <!-- Devicon for precise skill icons -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/assets/css/sn.css?v=20260321" onerror="window.__appBoot?.markFailed('We could not load the page properly. Please refresh and try again.')">
+    <link rel="stylesheet" href="/assets/css/sn.css?v=20260618-2" onerror="window.__appBoot?.markFailed('We could not load the page properly. Please refresh and try again.')">
 </head>
 
 <body>
@@ -1054,6 +976,44 @@
         </div>
     </div>
 
+    <!-- Latest Thoughts Section -->
+    <section id="latest-thoughts" class="section bg-white x-posts-section" hidden aria-labelledby="latest-thoughts-title">
+        <div class="container">
+            <div class="x-posts-heading">
+                <div>
+                    <p class="x-posts-eyebrow">Writing on X</p>
+                    <h2 id="latest-thoughts-title" class="section-title">Latest <span class="fw-bold">Thoughts</span></h2>
+                </div>
+                <a href="https://x.com/TheSyntaxSinner" class="x-profile-link x-profile-link-desktop" target="_blank" rel="noopener noreferrer">
+                    Follow @TheSyntaxSinner <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="x-posts-carousel-shell">
+                <div class="x-posts-carousel-controls" data-x-carousel-controls hidden>
+                    <button type="button" class="x-carousel-button" data-x-carousel-previous
+                        aria-label="Show previous posts" aria-controls="x-posts-carousel">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="x-carousel-button" data-x-carousel-next
+                        aria-label="Show next posts" aria-controls="x-posts-carousel">
+                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div id="x-posts-carousel" class="x-posts-grid" data-x-posts role="region"
+                    aria-label="Latest posts on X" aria-live="polite" tabindex="0"></div>
+            </div>
+            <a href="https://x.com/TheSyntaxSinner" class="x-profile-link x-profile-link-mobile" target="_blank" rel="noopener noreferrer">
+                Follow @TheSyntaxSinner <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
+            </a>
+        </div>
+    </section>
+
+    <div class="section-divider section-divider-light x-posts-divider" data-x-posts-divider hidden aria-hidden="true">
+        <div class="container">
+            <span class="section-divider-line"></span>
+        </div>
+    </div>
+
     <!-- Beyond Code Section -->
     <section id="beyond-code" class="section bg-black">
         <div class="container">
@@ -1090,53 +1050,6 @@
                         <span class="beyond-link">View on Unsplash</span>
                     </div>
                 </a>
-            </div>
-        </div>
-    </section>
-
-    <div class="section-divider section-divider-light" aria-hidden="true">
-        <div class="container">
-            <span class="section-divider-line"></span>
-        </div>
-    </div>
-
-    <!-- GEO / Direct Answers Section -->
-    <section id="srinivasa-yadav-flutter-developer" class="section bg-white">
-        <div class="container geo-faq">
-            <h2 class="section-title">Srinivasa Yadav <span class="fw-bold">Flutter Developer</span></h2>
-            <p class="geo-faq-intro">
-                Direct profile facts for search engines, AI assistants, and people looking for Srinivasa Yadav,
-                Srinivasa, or a Flutter developer in Bengaluru.
-            </p>
-            <div class="geo-faq-list">
-                <article class="geo-faq-item">
-                    <h3>Who is Srinivasa Yadav?</h3>
-                    <p>
-                        Srinivasa Yadav, also known as Srinivasa, is a Flutter developer in Bengaluru, Karnataka,
-                        India with 5+ years of experience building mobile and web applications.
-                    </p>
-                </article>
-                <article class="geo-faq-item">
-                    <h3>Is Srinivasa Yadav a Flutter developer?</h3>
-                    <p>
-                        Yes. Srinivasa Yadav specializes in Flutter, Dart, Firebase, REST APIs, TypeScript, Node.js,
-                        and cross-platform mobile app development.
-                    </p>
-                </article>
-                <article class="geo-faq-item">
-                    <h3>Where is Srinivasa Yadav based?</h3>
-                    <p>
-                        Srinivasa Yadav is based in Bengaluru, Karnataka, India and works on mobile-first product
-                        development, frontend engineering, and backend integrations.
-                    </p>
-                </article>
-                <article class="geo-faq-item">
-                    <h3>What does Srinivasa Yadav build?</h3>
-                    <p>
-                        Srinivasa Yadav builds scalable Flutter mobile applications, web experiences, Firebase
-                        integrations, REST API integrations, serverless APIs, and Dart packages such as wheel_slider.
-                    </p>
-                </article>
             </div>
         </div>
     </section>
@@ -1230,7 +1143,7 @@
     </button>
 
     <!-- Scripts -->
-    <script src="/assets/js/sn.js?v=20260321" onerror="window.__appBoot?.markFailed('We could not load the page properly. Please refresh and try again.')"></script>
+    <script src="/assets/js/sn.js?v=20260618-2" onerror="window.__appBoot?.markFailed('We could not load the page properly. Please refresh and try again.')"></script>
     <script src="/assets/js/terminal.js?v=20260321"></script>
     <script type="module" src="/assets/js/firebase.js?v=20260321"></script>
     <script type="module">
