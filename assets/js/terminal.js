@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'email — direct email',
             'resume — download link',
             'contact — reach out fast',
+            'x — recent posts',
         ];
 
         const funCommands = [
@@ -652,6 +653,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'github — GitHub profile',
             'linkedin — LinkedIn profile',
             'email — direct email',
+            'x — recent posts',
             'ip — get your public IP (network fetch)',
             'ping — live HTTP latency check',
             'weather — weather near your IP location',
@@ -743,6 +745,23 @@ document.addEventListener('DOMContentLoaded', () => {
         email: () => [
             'mailto:hello@srinivasa.dev'
         ],
+        x: async () => {
+            try {
+                let response = await fetch('/api/x-posts');
+                if (!response.ok) {
+                    response = await fetch('/assets/data/x-posts.json', { cache: 'no-store' });
+                }
+                const posts = await response.json();
+                if (!Array.isArray(posts) || posts.length === 0) return ['No posts found.'];
+                
+                return [
+                    'Recent X posts:',
+                    ...posts.slice(0, 3)
+                ];
+            } catch (e) {
+                return ['Could not fetch posts right now.'];
+            }
+        },
         ip: async () => {
             try {
                 const primaryIp = await getPublicIp();
